@@ -1,0 +1,10 @@
+; $Id:  $
+name = Semantic Weblog
+description = A more or less small Module to create simple Ontologies, Topic Maps with Drupal while blogging
+package = Semantic Weblog
+dependencies[] = taxonomy
+version = 1
+core = 6.x
+
+
+

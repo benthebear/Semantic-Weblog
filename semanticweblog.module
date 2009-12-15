@@ -1,0 +1,351 @@
+<?
+// $Id$
+
+/* Author: Benjamin Birkenhake <benjamin@birkenhake.org> */
+/**
+* @file:
+* A more or less small Module to create simple Ontologies, Topic Maps with Drupal while blogging.
+*/
+
+/**
+ * History
+ *
+ * 2009 12 14: Added Module Settings
+ * 2009 12 13: Added new Association Type Creations, Editing, Deleting
+ * 2009 11 22: Added local tasks to terms page (from old module)
+ * 2009 11 22: Added Nodes' Terms Block (from old module)
+ * 2009 11 22: Added Register (from old module)
+ * 2009 11 22: Recreated this Module
+ *
+ */
+
+/**
+ * ToDos:
+ * [ ]: Add Tripel-Store and accompaning functions
+ * [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
+ * [ ]: Remove all non-hook functions from the file
+ *
+ */
+
+
+//menu_rebuild();
+
+//drupal_rebuild_theme_registry();
+
+include("semanticweblog.types.inc");
+include("semanticweblog.associations.inc");
+
+function semanticweblog_perm() {
+  return array('access semanticweblog', 'administer semanticweblog');
+}
+
+function semanticweblog_menu() {
+  $items = array();
+
+  // Modules Settings
+  $items['admin/settings/semanticweblog'] = array(
+    'title' => 'Semantic Weblog',
+    'description' => 'Several Settings for your Semantic Weblog',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('semanticweblog_admin_settings'),
+    'access arguments' => array('administer semanticweblog'),
+    'menu_name' => 'Semantic Weblog',
+  );
+
+  // Menu Items for the Register
+  $items['register/%/%'] = array(
+    'title' => 'Register',
+    'description' => 'The Register of a single Vocabulary',
+    'page arguments' => array(1,2),
+    'page callback' => 'semanticweblog_register_vocabulary',
+    'access arguments' => array('access semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+
+  $items['register/%'] = array(
+    'title' => 'Register',
+    'description' => 'The Register of a single Vocabulary',
+    'page arguments' => array(1),
+    'page callback' => 'semanticweblog_register_vocabulary',
+    'access arguments' => array('access semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+
+  $items['register'] = array(
+    'title' => 'Register',
+    'description' => 'The Register of a single Vocabulary',
+    'page callback' => 'semanticweblog_register_vocabulary',
+    'access arguments' => array('access semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+
+  // Menu Items for Local Term Tasks
+  $items['taxonomy/term/%/edit'] = array(
+    'title' => 'Edit',
+    'description' => 'Edit this Term',
+    'access arguments' => array('administer taxonomy'),
+    'page callback' => 'semanticweblog_term_edit',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['taxonomy/term/%/view'] = array(
+    'title' => 'View',
+    'description' => 'View this Term',
+    'access arguments' => array('access taxonomy'),
+    'page callback' => 'semanticweblog_term_view',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+
+  // Menu Items for Association Types
+  $items['admin/content/associationtype'] = array(
+    'title' => 'Association Types',
+    'description' => 'Add, edit and delete Association Types',
+    'page callback' => 'semanticweblog_administer_associationtypes',
+    'access arguments' => array('administer semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+
+  $items['admin/content/associationtype/%/edit'] = array(
+    'title' => 'Association Types',
+    'page arguments' => array(3),
+    'description' => 'Edit an Association Type',
+    'page callback' => 'semanticweblog_administer_associationtypes_edit',
+    'access arguments' => array('administer semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+
+  $items['admin/content/associationtype/%/delete'] = array(
+    'title' => 'Association Types',
+    'page arguments' => array(3),
+    'description' => 'Delete an Association Type',
+    'page callback' => 'semanticweblog_administer_associationtypes_delete',
+    'access arguments' => array('administer semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+
+  // Menu Items for Associations
+  $items['admin/content/association'] = array(
+    'title' => 'Associations',
+    'description' => 'Add, edit and delete Associations',
+    'page callback' => 'semanticweblog_administer_associations',
+    'access arguments' => array('administer semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+
+
+  return $items;
+}
+
+function semanticweblog_admin_settings() {
+  $form["semanticweblog"] = array();
+  $vocabs = taxonomy_get_vocabularies();
+  //dprint_r($vocabs);
+  foreach ($vocabs as $voc) {
+    $option = array();
+    $options[$voc->vid] = $voc->name;
+  }
+  $form['semanticweblog']['semanticweblog_lexicon'] = array('#type' => 'select',
+  '#title' => t('Lexicon Vocabulary'),
+  '#default_value' => variable_get('semanticweblog_lexicon', ""),
+  '#size' => 1,
+  '#description' => t('Which Vocabulary shall be your Lexicon?'),
+  '#options' => $options,
+  );
+  return system_settings_form($form);
+}
+
+function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    $blocks[0] = array(
+      'info' => t('Semantic Weblog: Nodes Terms'),
+    );
+    $blocks[1] = array(
+      'info' => t('Semantic Weblog: Create Association'),
+    );
+
+    return $blocks;
+  }
+  else if ($op == 'configure' && $delta == 0) {
+  }
+  else if ($op == 'save' && $delta == 0) {
+  }
+  else if ($op == 'view') {
+    switch ($delta) {
+      case 0:
+        $content = semanticweblog_block_nodesterms();
+        //drupal_set_message("Content:".$content.":");
+        if ($content) {
+          $block = array(
+          'subject' => t('Node Terms'),
+          'content' => semanticweblog_block_nodesterms(),
+          );
+        }
+        else{
+          return null;
+        }
+      break;
+
+      case 1:
+        $block = array(
+          'subject' => t('Create an Association'),
+          'content' => semanticweblog_block_add_association(),
+          );
+      break;
+
+
+    }
+    return $block;
+  }
+}
+
+function semanticweblog_block_nodesterms() {
+  if (arg(0) == 'node') {
+    if (is_numeric(arg(1))) {
+      $node = node_load(arg(1));
+      //dprint_r($node);
+    }
+  }
+  return $node ? theme("semanticweblog_nodesterms_block", $node) : NULL;
+}
+
+function semanticweblog_term_view() {
+  drupal_goto("taxonomy/term/" . arg(2));
+}
+
+function semanticweblog_term_edit() {
+  drupal_goto("admin/content/taxonomy/edit/term/" . arg(2));
+}
+
+function semanticweblog_form_alter(&$form, $form_state, $form_id) {
+  $form['taxonomy']['#weight'] = 1;
+  return $form;
+}
+
+function semanticweblog_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  if ($op=="view") {
+    semanticweblog_extend_head();
+  }
+}
+
+
+// Theming
+
+
+
+function semanticweblog_theme() {
+  return array(
+  // The hook or form id in this case.
+  'taxonomy_term_page' => array(
+  // Default arguments.
+  'arguments' => array('tids' => NULL, 'result' => NULL),
+  'function' => "semanticweblog_taxonomy_term_page",
+  ),
+  'semanticweblog_nodesterms_block' => array(
+  'arguments' => array('node' => NULL),
+  ),
+  'semanticweblog_register_vocabulary' => array(
+  'arguments' => array('terms' => array(), 'letter' => NULL),
+  ),
+  'semanticweblog_register_alphabet' => array(
+  'arguments' => array('vid' => NULL, 'letter' => NULL),
+  ),
+  );
+}
+
+
+
+/**
+ * Render a taxonomy term page HTML output.
+ *
+ * This function adds an link to edit the term, if access to taxonomy management is given.
+ *
+ * @param $tids
+ *   An array of term ids.
+ * @param $result
+ *   A pager_query() result, such as that performed by taxonomy_select_nodes().
+ */
+function semanticweblog_taxonomy_term_page($tids, $result) {
+  drupal_add_css(drupal_get_path('module', 'semanticweblog') . '/semanticweblog.css');
+  $output = '';
+
+  // Only display the description if we have a single term, to avoid clutter and confusion.
+  if (count($tids) == 1) {
+    $term = taxonomy_get_term($tids[0]);
+    // Add Keywords to the header.
+    drupal_set_html_head('  <meta name="keywords" content="' . $term->name  .'" />');
+    $output .= '<div class="taxonomy-term-description">';
+    $output .= filter_xss_admin($term->description);
+    //$output .= _semanticweblog_taxonomy_term_page($tids);
+    if (module_exists("semanticweblog_topic")) {
+      $output .= _semanticweblog_topic_taxonomy_term_page($tids);
+    }
+    //$output .= '<h3>'.t("Nodes on the topic")." &raquo;".$term->name.'&laquo;</h3>';
+    $output .= '</div>';
+  }
+
+  $output .= taxonomy_render_nodes($result);
+
+  return $output;
+}
+
+function _semanticweblog_taxonomy_term_page($tids) {
+
+  $output = "";
+  if (count($tids) == 1) {
+    $term = taxonomy_get_term($tids[0]);
+    if (user_access('administer taxonomy')) {
+      $output .= "<p>" . l(t("Edit term") . " '" . $term->name . "'", "admin/content/taxonomy/edit/term/" . $tids[0]) . "</p>";
+    }
+  }
+  return $output;
+
+}
+
+
+
+function semanticweblog_nodes_linking_to_me($node) {
+
+}
+
+
+function semanticweblog_extend_head() {
+  if (arg(0) == 'node') {
+    if (is_numeric(arg(1))) {
+      $node = node_load(arg(1));
+      if (is_array($node->taxonomy)) {
+        $terms = array();
+        foreach ($node->taxonomy as $term) {
+          $terms[] = $term->name;
+        }
+        drupal_set_html_head('  <meta name="keywords" content="' . implode(", ", $terms) . '" />');
+
+      }
+    }
+  }
+}
+
+/**
+ * This function thmes a Block which contains all Terms of one Node
+ *
+ * @param object $node
+ * @return string html-output
+ */
+function theme_semanticweblog_nodesterms_block($node) {
+  //drupal_set_message("theme block");
+  if (is_array($node->taxonomy) and count($node->taxonomy)>0) {
+    foreach ($node->taxonomy as $term) {
+      $item["data"] = l($term->name,"taxonomy/term/" . $term->tid, array('absolute' => true));
+      $items[] = $item;
+    }
+    $output = theme_item_list($items);
+  }
+  else{
+    $output = NULL;
+  }
+  //dprint($items);
+
+  return $output;
+}
+
+

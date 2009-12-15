@@ -1,0 +1,110 @@
+<?php
+// $Id$
+
+/**
+ * @file:
+ * Installation und Unstallation of the modules Tables
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function semanticweblog_install() {
+  // Create tables.
+  drupal_install_schema('semanticweblog');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function semanticweblog_uninstall() {
+  // Remove tables.
+  drupal_uninstall_schema('semanticweblog');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+
+function semanticweblog_schema() {
+  $schema['semanticweblog_types'] = array(
+    'description' => t('Stores association types.'),
+    'fields' => array(
+      'atid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t('Primary key: ID.'),
+      ),
+      'name' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big',
+        'description' => t('The name of the association type'),
+      ),
+      'role1' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big',
+        'description' => t('The role of the first memeber of the association type'),
+      ),
+      'role2' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big',
+        'description' => t('The role of the second memeber of the association type'),
+      ),
+    ),
+    'primary key' => array('atid')
+  );
+  $schema['semanticweblog_associations'] = array(
+    'description' => t('Stores associations.'),
+    'fields' => array(
+      'aid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t('Primary Key: ID.'),
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('The user id of the user who created this association.'),
+      ),
+      'member1tid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('The term id of the first term.'),
+      ),
+      'atid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('The atid of the association zype.'),
+      ),
+      'member2tid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('The term of the second term.'),
+      ),
+      'created' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('The timestamp of the moment of creation of this association'),
+      ),
+
+    ),
+    'primary key' => array('aid'),
+    'indexes' => array('atid' => array('atid'), 'member1tid' => array('member1tid'), 'member2tid' => array('member2tid')),
+  );
+  return $schema;
+}

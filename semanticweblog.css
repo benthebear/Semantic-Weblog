@@ -1,0 +1,21 @@
+
+#edit-role1-wrapper{
+ position:absolute;	
+	
+}
+
+#edit-atid-wrapper {
+	position:absolute;
+	left:250px;
+}
+	
+#edit-role2-wrapper {
+	position:absolute;
+	left:500px;
+}
+
+#edit-submit{
+	clear:both;
+	margin-top:7em;
+	margin-bottom:2em;
+}
