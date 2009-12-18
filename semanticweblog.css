@@ -1,27 +1,36 @@
 
-#edit-role1-wrapper{
+#edit-role1-wrapper,
+#edit-role1-1-wrapper{
  position:absolute;	
 	
 }
 
-#edit-atid-wrapper {
+#edit-atid-wrapper,
+#edit-atid-1-wrapper {
 	position:absolute;
 	left:250px;
 }
 	
-#edit-role2-wrapper {
+#edit-role2-wrapper,
+#edit-role2-1-wrapper {
 	position:absolute;
 	left:500px;
 }
 
-#edit-submit{
+#block-semanticweblog-1 fieldset{
+  min-height:200px;
+  
+}
+
+#edit-submit,
+#result input{
 	clear:both;
 	margin-top:7em;
 	margin-bottom:2em;
 }
 
 #block-semanticweblog-1{
-  width:400px;
+  width:800px;
   margin:10px;
   
 }

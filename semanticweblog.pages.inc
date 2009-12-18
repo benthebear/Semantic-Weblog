@@ -185,8 +185,10 @@ function semanticweblog_administer_associations() {
 function semanticweblog_add_add_association($term1, $atid, $term2){
   $termid1 = semanticweblog_term2tid($term1);
   $termid2 = semanticweblog_term2tid($term2);
+  $types = semanticweblog_load_all_types();
+  
   if(is_numeric($termid1) and is_numeric($termid2) and is_numeric($atid)) {
-     print "Assoc (almost) Created: " . $termid1 . " – " . $atid . " – " . $termid2;
+     print "Association  Created: " . $term1 . "(" . $termid1 . ") – " . $types[$atid]["name"] . " (" . $atid . ")" . " – " . $term2 . "(" . $termid2. ")";
     semanticweblog_insert_association($termid1, $atid, $termid2);
   }else{
     print  t('Error').": ";

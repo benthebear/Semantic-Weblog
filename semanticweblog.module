@@ -22,6 +22,8 @@
 
 /**
  * ToDos:
+ * [ ]: Do more Documentation
+ * [ ]: Chache semanticweblog_load_all_types() DB-Request. 
  * [ ]: Check for double Assocs.
  * [ ]: Add Tripel-Store and accompaning functions
  * [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
