@@ -183,6 +183,21 @@ function semanticweblog_administer_associations() {
 }
 
 function semanticweblog_add_add_association($term1, $atid, $term2){
-  print "Assoc (almost) Created: " .semanticweblog_term2tid($term1) . " – " . $atid . " – " . semanticweblog_term2tid($term2);
+  $termid1 = semanticweblog_term2tid($term1);
+  $termid2 = semanticweblog_term2tid($term2);
+  if(is_numeric($termid1) and is_numeric($termid2) and is_numeric($atid)) {
+     print "Assoc (almost) Created: " . $termid1 . " – " . $atid . " – " . $termid2;
+    semanticweblog_insert_association($termid1, $atid, $termid2);
+  }else{
+    print  t('Error').": ";
+    if(!is_numeric($termid1)){
+      print t("The first Term does not exists. ");
+    }
+     if(!is_numeric($termid2)){
+        print t("The second Term does not exists. ");
+      }
+   
+  }
+ 
   die;
 }

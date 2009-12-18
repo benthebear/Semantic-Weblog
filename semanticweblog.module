@@ -10,6 +10,7 @@
 /**
  * History
  *
+ * 2009 12 18: Added Ajax Block for Association Creation
  * 2009 12 14: Added Module Settings
  * 2009 12 13: Added new Association Type Creations, Editing, Deleting
  * 2009 11 22: Added local tasks to terms page (from old module)
@@ -21,6 +22,7 @@
 
 /**
  * ToDos:
+ * [ ]: Check for double Assocs.
  * [ ]: Add Tripel-Store and accompaning functions
  * [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
  * [ ]: Remove all non-hook functions from the file
@@ -28,7 +30,7 @@
  */
 
 
-menu_rebuild();
+// menu_rebuild();
 
 //drupal_rebuild_theme_registry();
 
@@ -134,7 +136,7 @@ function semanticweblog_menu() {
     'access arguments' => array('administer semanticweblog'),
     'file' => 'semanticweblog.pages.inc',
   );
-  
+
   $items['association/add/%/%/%'] = array(
     'title' => 'Add an Association',
      'page arguments' => array(2,3,4),
@@ -143,10 +145,6 @@ function semanticweblog_menu() {
     'access arguments' => array('administer semanticweblog'),
     'file' => 'semanticweblog.pages.inc',
   );
-  
-  
-
-
   return $items;
 }
 
