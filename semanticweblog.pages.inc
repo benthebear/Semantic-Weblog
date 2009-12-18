@@ -193,10 +193,10 @@ function semanticweblog_add_add_association($term1, $atid, $term2){
   }else{
     print  t('Error').": ";
     if(!is_numeric($termid1)){
-      print t("The first Term does not exists. ");
+      print t('Your Association needs a first Member.')." ";
     }
      if(!is_numeric($termid2)){
-        print t("The second Term does not exists. ");
+        print t('Your Association needs a second Member.')." ";
       }
    
   }
