@@ -146,6 +146,14 @@ function semanticweblog_administer_associationtypes_edit($atid) {
   return $output;
 }
 
+/**
+ * The Page to delete an Association Type
+ *
+ * 
+ * @return $output
+ * @author Benjamin Birkenhake
+ **/
+
 function semanticweblog_administer_associationtypes_delete($atid) {
   $output = "";
   $atid = arg(3);
@@ -157,6 +165,13 @@ function semanticweblog_administer_associationtypes_delete($atid) {
 }
 
 // Pages to administer Associations
+
+/**
+ * The central Page to administer Associations
+ *
+ * @return $output 
+ * @author Benjamin Birkenhake
+ **/
 
 function semanticweblog_administer_associations() {
   drupal_add_css(drupal_get_path('module', 'semanticweblog')  . '/semanticweblog.css');
@@ -181,6 +196,14 @@ function semanticweblog_administer_associations() {
 
   return $output;
 }
+
+
+/**
+ * URL to create an Association via a remote Request e.g. Ajax
+ *
+ * @return text
+ * @author Benjamin Birkenhake
+ **/
 
 function semanticweblog_add_add_association($term1, $atid, $term2){
   $termid1 = semanticweblog_term2tid($term1);
