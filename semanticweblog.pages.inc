@@ -181,3 +181,8 @@ function semanticweblog_administer_associations() {
 
   return $output;
 }
+
+function semanticweblog_add_add_association($term1, $atid, $term2){
+  print "Assoc Created: " .semanticweblog_term2tid($term1) . " – " . $atid . " – " . semanticweblog_term2tid($term2);
+  die;
+}

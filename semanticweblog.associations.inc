@@ -8,9 +8,8 @@
 
 // Functions and Forms for Association Creation
 
-function semanticweblog_block_add_association() {
-  $output = "Let's rock!";
-  $output .= drupal_get_form("semanticweblog_basic_add_association");
+function semanticweblog_block_add_association_ajax() {
+  $output .= drupal_get_form("semanticweblog_ajax_add_association");
   return $output;
 }
 
@@ -59,6 +58,51 @@ function semanticweblog_basic_add_association() {
     '#type' => 'submit',
     '#value' => t('Create new Association'),
   );
+  return $form;
+}
+
+function semanticweblog_ajax_add_association() {
+  $form = array();
+  $form["semanticweblog_ajax_add_association"] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#title' => t("Add an Association"),
+    );
+  $form["semanticweblog_ajax_add_association"]["role1"] = array(
+    '#type' => 'textfield',
+    '#title' => t('First Member'),
+    '#default_value' => '',
+    '#size' => 30,
+    '#maxlength' => 512,
+    '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
+    //'#description' => t('Enter a name for the first Member of your Association'),
+  );
+
+  $types = semanticweblog_load_all_types();
+  foreach ($types as $type) {
+    $options[$type["atid"]] = $type["name"];
+  }
+
+  $form["semanticweblog_ajax_add_association"]['atid'] = array(
+    '#type' => 'select',
+    '#title' => t('Association Type'),
+    '#default_value' => '',
+    '#size' => 1,
+    //'#description' => t('How are your Topics related?'),
+    '#options' => $options,
+  );
+
+  $form["semanticweblog_ajax_add_association"]["role2"] = array(
+    '#type' => 'textfield',
+    '#title' => t('Second Memeber'),
+    '#default_value' => '',
+    '#size' => 30,
+    '#maxlength' => 512,
+    '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
+    //'#description' => t('Enter a name for the second Member of your Association'),
+  );
+  
+  $form["semanticweblog_ajax_add_association"]["role2"]["#suffix"] = "<div id='result'/><input type='button' onclick='semanticweblog_send_assoc();' value='Creat Assoc on the fly'>";
   return $form;
 }
 

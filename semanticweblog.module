@@ -28,12 +28,14 @@
  */
 
 
-//menu_rebuild();
+menu_rebuild();
 
 //drupal_rebuild_theme_registry();
 
 include("semanticweblog.types.inc");
 include("semanticweblog.associations.inc");
+
+drupal_add_js(drupal_get_path('module', 'semanticweblog') . '/semanticweblog.js');
 
 function semanticweblog_perm() {
   return array('access semanticweblog', 'administer semanticweblog');
@@ -132,6 +134,17 @@ function semanticweblog_menu() {
     'access arguments' => array('administer semanticweblog'),
     'file' => 'semanticweblog.pages.inc',
   );
+  
+  $items['association/add/%/%/%'] = array(
+    'title' => 'Add an Association',
+     'page arguments' => array(2,3,4),
+    'description' => 'Add an Association',
+    'page callback' => 'semanticweblog_add_add_association',
+    'access arguments' => array('administer semanticweblog'),
+    'file' => 'semanticweblog.pages.inc',
+  );
+  
+  
 
 
   return $items;
@@ -189,7 +202,7 @@ function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
       case 1:
         $block = array(
           'subject' => t('Create an Association'),
-          'content' => semanticweblog_block_add_association(),
+          'content' => semanticweblog_block_add_association_ajax(),
           );
       break;
 
