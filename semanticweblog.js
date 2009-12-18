@@ -18,6 +18,6 @@ function loadcontent(target,url,append) {
          }// if
       }//function
       ;
-      http_request.open("GET","http://login.abitur-undwieweiter.de/ajax/"+url,true); // Get the data, which file?, loading asynchronously is true
+      http_request.open("GET",url,true); // Get the data, which file?, loading asynchronously is true
       http_request.send(null); // Es werden keine Daten transferiert, darum
    }//function
