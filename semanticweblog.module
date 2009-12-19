@@ -11,11 +11,21 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
+* @todo More Admin Settings.
+* @todo Nodes linking to me.
+* @todo Do more Documentation.
+* @todo Chache semanticweblog_load_all_types() DB-Request.
+* @todo Check for double Assocs.
+* @todo Add Tripel-Store and accompaning functions.
+* @todo Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
+* @todo Remove all non-hook functions from the file.
+*
 */
 
 /**
 * History
 *
+* 2009 12 19: Added Pager on Association Administer Page
 * 2009 12 19: Renamed the form elementes of the two association creation forms
 * 2009 12 19: Added Delete function for Associations.
 * 2009 12 19: Added double Association prevention
@@ -29,23 +39,10 @@
 *
 */
 
-/**
-* ToDos:
-*
-* [ ]: More Admin Settings.
-* [ ]: Nodes linking to me.
-* [ ]: Do more Documentation.
-* [ ]: Chache semanticweblog_load_all_types() DB-Request.
-* [x]: Check for double Assocs.
-* [x]: Add Tripel-Store and accompaning functions.
-* [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
-* [ ]: Remove all non-hook functions from the file.
-*
-*/
 
 // To rebuild the menu and the theme registry during development
 // menu_rebuild();
-//drupal_rebuild_theme_registry();
+// drupal_rebuild_theme_registry();
 
 // Including non-regular Files
 include("semanticweblog.types.inc");
@@ -199,11 +196,25 @@ function semanticweblog_admin_settings() {
     $options[$voc->vid] = $voc->name;
   }
   $form['semanticweblog']['semanticweblog_lexicon'] = array('#type' => 'select',
-  '#title' => t('Lexicon Vocabulary'),
-  '#default_value' => variable_get('semanticweblog_lexicon', ""),
-  '#size' => 1,
-  '#description' => t('Which Vocabulary shall be your Lexicon?'),
-  '#options' => $options,
+    '#title' => t('Lexicon Vocabulary'),
+    '#default_value' => variable_get('semanticweblog_lexicon', ""),
+    '#size' => 1,
+    '#description' => t('Which Vocabulary shall be your Lexicon?'),
+    '#options' => $options,
+  );
+  $pager_options = array(
+    '10' => '10',
+    '20' => '20',
+    '50' => '50',
+    '100' => '100',
+    'All' => 'All',
+    );
+  $form['semanticweblog']['semanticweblog_admin_associations_pager'] = array('#type' => 'select',
+    '#title' => t('No. of Assciations per Page'),
+    '#default_value' => variable_get('semanticweblog_admin_associations_pager', "10"),
+    '#size' => 1,
+    '#description' => t('The Number of Associations per Page on the Association Admin Page'),
+    '#options' => $pager_options,
   );
   return system_settings_form($form);
 }

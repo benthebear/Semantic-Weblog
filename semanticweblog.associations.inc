@@ -196,7 +196,8 @@ function semanticweblog_load_all_associations() {
 }
 
 function semanticweblog_load_all_associations_paged() {
-  $result = pager_query("SELECT * FROM {semanticweblog_associations}", $limit = 10, $element = 0, $count_query = NULL);
+  $limit = variable_get('semanticweblog_admin_associations_pager', "10");
+  $result = pager_query("SELECT * FROM {semanticweblog_associations}", $limit, $element = 0, $count_query = NULL);
   $items = array();
   while ($item = db_fetch_array($result)) {
     $items[$item['aid']] = $item;
