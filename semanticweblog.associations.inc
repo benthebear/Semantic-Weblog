@@ -188,7 +188,15 @@ function semanticweblog_insert_association ($member1, $assoctype, $member2) {
 
 function semanticweblog_load_all_associations() {
   $result = db_query("SELECT * FROM {semanticweblog_associations}");
+  $items = array();
+  while ($item = db_fetch_array($result)) {
+    $items[$item['aid']] = $item;
+  }
+  return $items;
+}
 
+function semanticweblog_load_all_associations_paged() {
+  $result = pager_query("SELECT * FROM {semanticweblog_associations}", $limit = 10, $element = 0, $count_query = NULL);
   $items = array();
   while ($item = db_fetch_array($result)) {
     $items[$item['aid']] = $item;
@@ -211,9 +219,13 @@ function semanticweblog_load_all_terms($tids) {
   return $items;
 }
 
-function semanaticweblog_get_all_associations() {
+function semanaticweblog_get_all_associations($paged) {
   $types = semanticweblog_load_all_types();
-  $assocs = semanticweblog_load_all_associations();
+  if($paged){
+    $assocs = semanticweblog_load_all_associations_paged();
+  }else{
+    $assocs = semanticweblog_load_all_associations();
+  }
   foreach ($assocs as $assoc) {
     $tids[] = $assoc["member1tid"];
     $tids[] = $assoc["member2tid"];

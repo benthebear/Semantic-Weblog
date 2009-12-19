@@ -184,9 +184,9 @@ function semanticweblog_administer_associations() {
   // Association Creation Form
   $output .= drupal_get_form("semanticweblog_basic_add_association");
 
-  // All Associations
-  $assocs = semanaticweblog_get_all_associations();
-  //dprint_r($assocs);
+  // Get the Associations 
+  $assocs = semanaticweblog_get_all_associations(TRUE);
+  
   foreach ($assocs as $assoc) {
     $rows[] = array(
       $assoc["member1"]["role"],
@@ -198,6 +198,7 @@ function semanticweblog_administer_associations() {
     );
   }
   $output .=  theme_table(array("Role", "First Member", "Relation", "Role", "Second Member", "Actions"), $rows);
+  $output .= theme('pager');
 
   return $output;
 }
