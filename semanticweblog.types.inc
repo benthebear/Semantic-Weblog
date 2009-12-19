@@ -142,8 +142,7 @@ function semanticweblog_edit_association_type_submit($form, &$form_state) {
 
 // The functions and files for deleting an Association Type
 
-function semanticweblog_delete_association_type() {
-  // Edit an Assoctyoe
+function semanticweblog_delete_association_type() {  
   $atid = arg(3);
   $ats = semanticweblog_load_all_types();
   $myat = $ats[$atid];

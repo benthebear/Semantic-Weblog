@@ -210,7 +210,7 @@ function semanticweblog_add_add_association($term1, $atid, $term2){
   $termid2 = semanticweblog_term2tid($term2);
   $types = semanticweblog_load_all_types();
   
-  if(is_numeric($termid1) and is_numeric($termid2) and is_numeric($atid)) {
+  if(is_numeric($termid1) and is_numeric($termid2) and is_numeric($atid) and !semanticweblog_exists_association ($termid1, $atid, $termid2)) {
      print "Association  Created: " . $term1 . "(" . $termid1 . ") – " . $types[$atid]["name"] . " (" . $atid . ")" . " – " . $term2 . "(" . $termid2. ")";
     semanticweblog_insert_association($termid1, $atid, $termid2);
   }else{
@@ -218,11 +218,27 @@ function semanticweblog_add_add_association($term1, $atid, $term2){
     if(!is_numeric($termid1)){
       print t('Your Association needs a first Member.')." ";
     }
-     if(!is_numeric($termid2)){
-        print t('Your Association needs a second Member.')." ";
-      }
-   
-  }
- 
+    if(!is_numeric($termid2)){
+      print t('Your Association needs a second Member.')." ";
+    }
+    if(semanticweblog_exists_association ($termid1, $atid, $termid2)){
+      print t('Your Association already exists.');
+    }   
+  } 
   die;
+}
+
+/**
+ * The Page to delete an Association Type
+ *
+ * 
+ * @return $output
+ * @author Benjamin Birkenhake
+ **/
+
+function semanticweblog_administer_associations_delete($aid) {
+  $output = "";  
+  $output .= t("Are you really sure, you want to delete the Association") . " No. " . $aid . "' ?";
+  $output .= drupal_get_form("semanticweblog_delete_association_form");
+  return $output;
 }

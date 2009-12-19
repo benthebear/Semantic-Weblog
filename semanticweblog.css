@@ -1,18 +1,18 @@
 
-#edit-role1-wrapper,
-#edit-role1-1-wrapper{
+#edit-role1-basic-wrapper,
+#edit-role1-ajax-wrapper{
  position:absolute;	
 	
 }
 
-#edit-atid-wrapper,
-#edit-atid-1-wrapper {
+#edit-atid-basic-wrapper,
+#edit-atid-ajax-wrapper {
 	position:absolute;
 	left:250px;
 }
 	
-#edit-role2-wrapper,
-#edit-role2-1-wrapper {
+#edit-role2-basic-wrapper,
+#edit-role2-ajax-wrapper {
 	position:absolute;
 	left:500px;
 }

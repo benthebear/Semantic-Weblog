@@ -20,7 +20,7 @@ function semanticweblog_basic_add_association() {
     '#collapsible' => TRUE,
     '#title' => t("Add an Association"),
     );
-  $form["semanticweblog_basic_add_association"]["role1"] = array(
+  $form["semanticweblog_basic_add_association"]["role1-basic"] = array(
     '#type' => 'textfield',
     '#title' => t('First Member'),
     '#default_value' => '',
@@ -35,7 +35,7 @@ function semanticweblog_basic_add_association() {
     $options[$type["atid"]] = $type["name"];
   }
 
-  $form["semanticweblog_basic_add_association"]['atid'] = array(
+  $form["semanticweblog_basic_add_association"]['atid-basic'] = array(
     '#type' => 'select',
     '#title' => t('Association Type'),
     '#default_value' => '',
@@ -44,7 +44,7 @@ function semanticweblog_basic_add_association() {
     '#options' => $options,
   );
 
-  $form["semanticweblog_basic_add_association"]["role2"] = array(
+  $form["semanticweblog_basic_add_association"]["role2-basic"] = array(
     '#type' => 'textfield',
     '#title' => t('Second Memeber'),
     '#default_value' => '',
@@ -68,7 +68,7 @@ function semanticweblog_ajax_add_association() {
     '#collapsible' => TRUE,
     '#title' => t("Add an Association"),
     );
-  $form["semanticweblog_ajax_add_association"]["role1"] = array(
+  $form["semanticweblog_ajax_add_association"]["role1-ajax"] = array(
     '#type' => 'textfield',
     '#title' => t('First Member'),
     '#default_value' => '',
@@ -83,7 +83,7 @@ function semanticweblog_ajax_add_association() {
     $options[$type["atid"]] = $type["name"];
   }
 
-  $form["semanticweblog_ajax_add_association"]['atid'] = array(
+  $form["semanticweblog_ajax_add_association"]['atid-ajax'] = array(
     '#type' => 'select',
     '#title' => t('Association Type'),
     '#default_value' => '',
@@ -92,7 +92,7 @@ function semanticweblog_ajax_add_association() {
     '#options' => $options,
   );
 
-  $form["semanticweblog_ajax_add_association"]["role2"] = array(
+  $form["semanticweblog_ajax_add_association"]["role2-ajax"] = array(
     '#type' => 'textfield',
     '#title' => t('Second Memeber'),
     '#default_value' => '',
@@ -102,20 +102,8 @@ function semanticweblog_ajax_add_association() {
     //'#description' => t('Enter a name for the second Member of your Association'),
   );
   
-  $form["semanticweblog_ajax_add_association"]["role2"]["#suffix"] = "<div id='result'/><input type='button' onclick='semanticweblog_send_assoc();' value='Creat Assoc on the fly'>";
+  $form["semanticweblog_ajax_add_association"]["role2-ajax"]["#suffix"] = "<div id='result'/><input type='button' onclick='semanticweblog_send_assoc();' value='Creat Assoc on the fly'>";
   return $form;
-}
-
-function semanticweblog_basic_add_association_validate($form, &$form_state) {
-  if ($form_state['values']['atid'] == '') {
-    form_set_error('new_type_name', t('Your Association needs an Association Type.'));
-  }
-  if ($form_state['values']['role1'] == '') {
-    form_set_error('new_type_role1', t('Your Association needs a first Member.'));
-  }
-  if ($form_state['values']['role2'] == '') {
-    form_set_error('new_type_role2', t('Your Association needs a second Member.'));
-  }
 }
 
 function semanticweblog_term2tid($term) {
@@ -131,20 +119,64 @@ function semanticweblog_term2tid($term) {
   return $typed_term_tid;
 }
 
-function semanticweblog_basic_add_association_submit($form, &$form_state) {
+
+function semanticweblog_basic_add_association_validate($form, &$form_state) {
+  if ($form_state['values']['atid-basic'] == '') {
+    form_set_error('new_type_name', t('Your Association needs an Association Type.'));
+  }
+  if ($form_state['values']['role1-basic'] == '') {
+    form_set_error('new_type_role1', t('Your Association needs a first Member.'));
+  }
+  if ($form_state['values']['role2-basic'] == '') {
+    form_set_error('new_type_role2', t('Your Association needs a second Member.'));
+  }
+  $tid1 = semanticweblog_term2tid($form_state["values"]["role1-basic"]);
+  $tid2 = semanticweblog_term2tid($form_state["values"]["role2-basic"]);
+  if (semanticweblog_exists_association ($tid1, $form_state['values']['atid-basic'], $tid2)) {
+    form_set_error('new_type_role2', t('Your Association already exists.'));
+  }
+}
+
+
+function semanticweblog_basic_add_association_submit ($form, &$form_state) {
   $vid = variable_get('semanticweblog_lexicon', "");
-  $tid1 = semanticweblog_term2tid($form_state["values"]["role1"]);
-  $tid2 = semanticweblog_term2tid($form_state["values"]["role2"]);
-  $atid = $form_state["values"]["atid"];
+  $tid1 = semanticweblog_term2tid($form_state["values"]["role1-basic"]);
+  $tid2 = semanticweblog_term2tid($form_state["values"]["role2-basic"]);
+  $atid = $form_state["values"]["atid-basic"];
   semanticweblog_insert_association($tid1, $atid, $tid2);
   drupal_set_message(t('Your association has been saved.'));
   drupal_goto("admin/content/association");
 }
+/**
+ * Checks wether an Association already exists
+ */
+function semanticweblog_exists_association ($member1, $assoctype, $member2) {
+  $result = db_query("SELECT count(aid) FROM {semanticweblog_associations} WHERE member1tid = %d AND atid = %d AND member2tid = %d",$member1, $assoctype, $member2);
+  $item = db_fetch_array($result);
+  if ($item["count(aid)"] > 0) {
+    return true;
+  }else{
+    return false;
+  } 
+}
 
-function semanticweblog_insert_association($member1, $assoctype, $member2) {
-  global $user;
-  db_query("INSERT INTO {semanticweblog_associations} (uid, member1tid, atid, member2tid, created) VALUES (%d, %d, %d, %d, %d)", $user->uid, $member1, $assoctype, $member2, time());
-
+/**
+ * Inserts an new Association into the Database
+ *
+ * @param $member1 termID
+ * @param $assoctype association-type-ID
+ * @param $member2 termID
+ * @return void
+ */
+function semanticweblog_insert_association ($member1, $assoctype, $member2) {
+  if (!semanticweblog_exists_association ($member1, $assoctype, $member2)) {
+    global $user;
+    $result = db_query("INSERT INTO {semanticweblog_associations} (uid, member1tid, atid, member2tid, created) VALUES (%d, %d, %d, %d, %d)", $user->uid, $member1, $assoctype, $member2, time());
+    //dprint_r($result);
+    return $result;
+  }else{
+    return false;
+  }
 }
 
 // Functions for loading and displaying Associations.
@@ -203,6 +235,32 @@ function semanaticweblog_get_all_associations() {
   return $all;
 }
 
+// Functions for delete an association
+
+/**
+ * 
+ */
+function semanticweblog_delete_association($aid){  
+  db_query("DELETE FROM {semanticweblog_associations} WHERE aid = %d", $aid);
+}
+
+function semanticweblog_delete_association_form(){
+  $aid = arg(3); 
+  $form["semanticweblog_delete_association_form"]["aid"] = array('#type' => 'hidden',
+    '#value' => $aid,
+  );
+  $form["semanticweblog_delete_association_form"]["submit"] = array('#type' => 'submit',
+    '#value' => t('Delete this Association'),
+  );
+  return $form;
+}
+
+function semanticweblog_delete_association_form_submit($form, &$form_state){
+  $aid = $form_state['values']['aid'];
+  semanticweblog_delete_association($aid);
+  drupal_set_message(t('Your association has been deleted.'));
+  drupal_goto("admin/content/association");
+}
 
 
 
