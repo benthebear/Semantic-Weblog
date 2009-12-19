@@ -7,9 +7,9 @@ function semanticweblog_send_assoc(){
   var url = 'http://anmutunddemut.de/association/add';
   var method = 'GET';
   var append = true;
-  term1 = document.getElementById('edit-role1-1').value;
-  atid = document.getElementById('edit-atid-1').value;
-  term2 = document.getElementById('edit-role2-1').value;
+  term1 = document.getElementById('edit-role1-ajax').value;
+  atid = document.getElementById('edit-atid-ajax').value;
+  term2 = document.getElementById('edit-role2-ajax').value;
   url += '/' + term1 + '/' + atid + '/' + term2;
   //alert (url);
   
@@ -33,6 +33,6 @@ function semanticweblog_send_assoc(){
   http_request.open(method,url,true); // Get the data, which file?, loading asynchronously is true
   http_request.send(null); // Es werden keine Daten transferiert, darum
   // The two Term fields are being cleared
-  document.getElementById('edit-role1-1').value = '';
-  document.getElementById('edit-role2-1').value = '';
+  document.getElementById('edit-role1-ajax').value = '';
+  document.getElementById('edit-role2-ajax').value = '';
 }//function
