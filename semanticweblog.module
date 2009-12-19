@@ -10,6 +10,7 @@
 /**
  * History
  *
+ * 2009 12 19: Renamed the form elementes of the two association creation forms 
  * 2009 12 19: Added Delete function for Associations.
  * 2009 12 19: Added double Association prevention
  * 2009 12 18: Added Ajax Block for Association Creation
@@ -28,14 +29,14 @@
  * [ ]: Do more Documentation
  * [ ]: Chache semanticweblog_load_all_types() DB-Request. 
  * [x]: Check for double Assocs.
- * [ ]: Add Tripel-Store and accompaning functions
+ * [x]: Add Tripel-Store and accompaning functions
  * [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
  * [ ]: Remove all non-hook functions from the file
  *
  */
 
 
-menu_rebuild();
+// menu_rebuild();
 
 //drupal_rebuild_theme_registry();
 
