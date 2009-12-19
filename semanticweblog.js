@@ -1,3 +1,8 @@
+// @author Benjamin Birkenhake <benjaminbirkenhake.org>
+// @package semanticweblog
+// @copyright creative commons by-sa 
+
+
 function semanticweblog_send_assoc(){
   // Create all necessary Variables
   var term1 = '';

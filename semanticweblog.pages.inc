@@ -4,6 +4,11 @@
 /**
   * @file
   * All Pages of the Module
+  *
+  * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+  * @package semanticweblog
+  * @copyright creative commons by-sa 
+  *
   */
 
 function semanticweblog_register_vocabulary($vid="all", $letter="A") {

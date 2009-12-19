@@ -1,44 +1,47 @@
 <?
 // $Id$
 
-/* Author: Benjamin Birkenhake <benjamin@birkenhake.org> */
+/* Author: Benjamin Birkenhake <benjamin@birkenhake.org>*/
+
 /**
 * @file:
 * A more or less small Module to create simple Ontologies, Topic Maps with Drupal while blogging.
 *
 * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+* @package semanticweblog
+* @copyright creative commons by-sa
 *
 */
 
 /**
- * History
- *
- * 2009 12 19: Renamed the form elementes of the two association creation forms 
- * 2009 12 19: Added Delete function for Associations.
- * 2009 12 19: Added double Association prevention
- * 2009 12 18: Added Ajax Block for Association Creation
- * 2009 12 14: Added Module Settings
- * 2009 12 13: Added new Association Type Creations, Editing, Deleting
- * 2009 11 22: Added local tasks to terms page (from old module)
- * 2009 11 22: Added Nodes' Terms Block (from old module)
- * 2009 11 22: Added Register (from old module)
- * 2009 11 22: Recreated this Module
- *
- */
+* History
+*
+* 2009 12 19: Renamed the form elementes of the two association creation forms
+* 2009 12 19: Added Delete function for Associations.
+* 2009 12 19: Added double Association prevention
+* 2009 12 18: Added Ajax Block for Association Creation
+* 2009 12 14: Added Module Settings
+* 2009 12 13: Added new Association Type Creations, Editing, Deleting
+* 2009 11 22: Added local tasks to terms page (from old module)
+* 2009 11 22: Added Nodes' Terms Block (from old module)
+* 2009 11 22: Added Register (from old module)
+* 2009 11 22: Recreated this Module
+*
+*/
 
 /**
- * ToDos:
- * 
- * [ ]: More Admin Settings.
- * [ ]: Nodes linking to me.
- * [ ]: Do more Documentation.
- * [ ]: Chache semanticweblog_load_all_types() DB-Request. 
- * [x]: Check for double Assocs.
- * [x]: Add Tripel-Store and accompaning functions.
- * [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
- * [ ]: Remove all non-hook functions from the file.
- *
- */
+* ToDos:
+*
+* [ ]: More Admin Settings.
+* [ ]: Nodes linking to me.
+* [ ]: Do more Documentation.
+* [ ]: Chache semanticweblog_load_all_types() DB-Request.
+* [x]: Check for double Assocs.
+* [x]: Add Tripel-Store and accompaning functions.
+* [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
+* [ ]: Remove all non-hook functions from the file.
+*
+*/
 
 // To rebuild the menu and the theme registry during development
 // menu_rebuild();
@@ -52,21 +55,21 @@ include("semanticweblog.associations.inc");
 drupal_add_js(drupal_get_path('module', 'semanticweblog') . '/semanticweblog.js');
 
 /**
- * Implementation of hook_perm
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Implementation of hook_perm
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_perm() {
   return array('access semanticweblog', 'administer semanticweblog');
 }
 
 /**
- * Implementation of hook_menu
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Implementation of hook_menu
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_menu() {
   $items = array();
 
@@ -160,7 +163,7 @@ function semanticweblog_menu() {
     'access arguments' => array('administer semanticweblog'),
     'file' => 'semanticweblog.pages.inc',
   );
-  
+
   $items['admin/content/association/%/delete'] = array(
     'title' => 'Associations',
     'description' => 'Delete an Associations',
@@ -182,11 +185,11 @@ function semanticweblog_menu() {
 }
 
 /**
- * Implementation of hook_admin_settings
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Implementation of hook_admin_settings
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_admin_settings() {
   $form["semanticweblog"] = array();
   $vocabs = taxonomy_get_vocabularies();
@@ -206,11 +209,11 @@ function semanticweblog_admin_settings() {
 }
 
 /**
- * Implementation of hook_block
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Implementation of hook_block
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
   if ($op == 'list') {
     $blocks[0] = array(
@@ -255,11 +258,11 @@ function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
   }
 }
 /**
- * Delovers a block with the terms of a node
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Delovers a block with the terms of a node
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_block_nodesterms() {
   if (arg(0) == 'node') {
     if (is_numeric(arg(1))) {
@@ -271,44 +274,44 @@ function semanticweblog_block_nodesterms() {
 }
 
 /**
- * Additional Lokal Task "View" for Terms 
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Additional Lokal Task "View" for Terms
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_term_view() {
   drupal_goto("taxonomy/term/" . arg(2));
 }
 
 /**
- * Additional Lokal Task "Edit" for Terms 
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Additional Lokal Task "Edit" for Terms
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_term_edit() {
   drupal_goto("admin/content/taxonomy/edit/term/" . arg(2));
 }
 
 /**
- * Implementation of hook_form_alter
- *
- * To position the taxonomy
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Implementation of hook_form_alter
+*
+* To position the taxonomy
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_form_alter(&$form, $form_state, $form_id) {
   $form['taxonomy']['#weight'] = 1;
   return $form;
 }
 
 /**
- * Add additional semantic Information to the Head
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Add additional semantic Information to the Head
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   if ($op=="view") {
     semanticweblog_extend_head();
@@ -316,11 +319,11 @@ function semanticweblog_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
 }
 
 /**
- * Add Terms as keywords to the head
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Add Terms as keywords to the head
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_extend_head() {
   if (arg(0) == 'node') {
     if (is_numeric(arg(1))) {
@@ -342,11 +345,11 @@ function semanticweblog_extend_head() {
 
 
 /**
- * Implementation of hook_theme
- *
- * @author Benjamin Birkenhake <benjamin@birkenhake.org>
- *
- */
+* Implementation of hook_theme
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
+*/
 function semanticweblog_theme() {
   return array(
   // The hook or form id in this case.
@@ -370,15 +373,15 @@ function semanticweblog_theme() {
 
 
 /**
- * Render a taxonomy term page HTML output.
- *
- * This function adds an link to edit the term, if access to taxonomy management is given.
- *
- * @param $tids
- *   An array of term ids.
- * @param $result
- *   A pager_query() result, such as that performed by taxonomy_select_nodes().
- */
+* Render a taxonomy term page HTML output.
+*
+* This function adds an link to edit the term, if access to taxonomy management is given.
+*
+* @param $tids
+*   An array of term ids.
+* @param $result
+*   A pager_query() result, such as that performed by taxonomy_select_nodes().
+*/
 function semanticweblog_taxonomy_term_page($tids, $result) {
   drupal_add_css(drupal_get_path('module', 'semanticweblog') . '/semanticweblog.css');
   $output = '';
@@ -421,11 +424,11 @@ function semanticweblog_nodes_linking_to_me($node) {
 
 
 /**
- * This function thmes a Block which contains all Terms of one Node
- *
- * @param object $node
- * @return string html-output
- */
+* This function thmes a Block which contains all Terms of one Node
+*
+* @param object $node
+* @return string html-output
+*/
 function theme_semanticweblog_nodesterms_block($node) {
   //drupal_set_message("theme block");
   if (is_array($node->taxonomy) and count($node->taxonomy)>0) {

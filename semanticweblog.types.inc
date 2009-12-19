@@ -4,6 +4,11 @@
 /**
   * @file:
   * This file contains all non-hook and non-theme Functions with the purpose of managing Associaton Types
+  *
+  * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+  * @package semanticweblog
+  * @copyright creative commons by-sa 
+  *
   */
 
 
