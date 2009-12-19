@@ -5,6 +5,9 @@
 /**
 * @file:
 * A more or less small Module to create simple Ontologies, Topic Maps with Drupal while blogging.
+*
+* @author Benjamin Birkenhake <benjamin@birkenhake.org>
+*
 */
 
 /**
@@ -26,29 +29,44 @@
 /**
  * ToDos:
  * 
- * [ ]: Do more Documentation
+ * [ ]: More Admin Settings.
+ * [ ]: Nodes linking to me.
+ * [ ]: Do more Documentation.
  * [ ]: Chache semanticweblog_load_all_types() DB-Request. 
  * [x]: Check for double Assocs.
- * [x]: Add Tripel-Store and accompaning functions
+ * [x]: Add Tripel-Store and accompaning functions.
  * [ ]: Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
- * [ ]: Remove all non-hook functions from the file
+ * [ ]: Remove all non-hook functions from the file.
  *
  */
 
-
+// To rebuild the menu and the theme registry during development
 // menu_rebuild();
-
 //drupal_rebuild_theme_registry();
 
+// Including non-regular Files
 include("semanticweblog.types.inc");
 include("semanticweblog.associations.inc");
 
+// Add CSS
 drupal_add_js(drupal_get_path('module', 'semanticweblog') . '/semanticweblog.js');
 
+/**
+ * Implementation of hook_perm
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_perm() {
   return array('access semanticweblog', 'administer semanticweblog');
 }
 
+/**
+ * Implementation of hook_menu
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_menu() {
   $items = array();
 
@@ -163,6 +181,12 @@ function semanticweblog_menu() {
   return $items;
 }
 
+/**
+ * Implementation of hook_admin_settings
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_admin_settings() {
   $form["semanticweblog"] = array();
   $vocabs = taxonomy_get_vocabularies();
@@ -181,6 +205,12 @@ function semanticweblog_admin_settings() {
   return system_settings_form($form);
 }
 
+/**
+ * Implementation of hook_block
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
   if ($op == 'list') {
     $blocks[0] = array(
@@ -224,7 +254,12 @@ function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
     return $block;
   }
 }
-
+/**
+ * Delovers a block with the terms of a node
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_block_nodesterms() {
   if (arg(0) == 'node') {
     if (is_numeric(arg(1))) {
@@ -235,22 +270,70 @@ function semanticweblog_block_nodesterms() {
   return $node ? theme("semanticweblog_nodesterms_block", $node) : NULL;
 }
 
+/**
+ * Additional Lokal Task "View" for Terms 
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_term_view() {
   drupal_goto("taxonomy/term/" . arg(2));
 }
 
+/**
+ * Additional Lokal Task "Edit" for Terms 
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_term_edit() {
   drupal_goto("admin/content/taxonomy/edit/term/" . arg(2));
 }
 
+/**
+ * Implementation of hook_form_alter
+ *
+ * To position the taxonomy
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_form_alter(&$form, $form_state, $form_id) {
   $form['taxonomy']['#weight'] = 1;
   return $form;
 }
 
+/**
+ * Add additional semantic Information to the Head
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   if ($op=="view") {
     semanticweblog_extend_head();
+  }
+}
+
+/**
+ * Add Terms as keywords to the head
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
+function semanticweblog_extend_head() {
+  if (arg(0) == 'node') {
+    if (is_numeric(arg(1))) {
+      $node = node_load(arg(1));
+      if (is_array($node->taxonomy)) {
+        $terms = array();
+        foreach ($node->taxonomy as $term) {
+          $terms[] = $term->name;
+        }
+        drupal_set_html_head('  <meta name="keywords" content="' . implode(", ", $terms) . '" />');
+
+      }
+    }
   }
 }
 
@@ -258,7 +341,12 @@ function semanticweblog_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
 // Theming
 
 
-
+/**
+ * Implementation of hook_theme
+ *
+ * @author Benjamin Birkenhake <benjamin@birkenhake.org>
+ *
+ */
 function semanticweblog_theme() {
   return array(
   // The hook or form id in this case.
@@ -303,10 +391,7 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     $output .= '<div class="taxonomy-term-description">';
     $output .= filter_xss_admin($term->description);
     //$output .= _semanticweblog_taxonomy_term_page($tids);
-    if (module_exists("semanticweblog_topic")) {
-      $output .= _semanticweblog_topic_taxonomy_term_page($tids);
-    }
-    //$output .= '<h3>'.t("Nodes on the topic")." &raquo;".$term->name.'&laquo;</h3>';
+        //$output .= '<h3>'.t("Nodes on the topic")." &raquo;".$term->name.'&laquo;</h3>';
     $output .= '</div>';
   }
 
@@ -316,7 +401,6 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
 }
 
 function _semanticweblog_taxonomy_term_page($tids) {
-
   $output = "";
   if (count($tids) == 1) {
     $term = taxonomy_get_term($tids[0]);
@@ -325,7 +409,6 @@ function _semanticweblog_taxonomy_term_page($tids) {
     }
   }
   return $output;
-
 }
 
 
@@ -335,21 +418,7 @@ function semanticweblog_nodes_linking_to_me($node) {
 }
 
 
-function semanticweblog_extend_head() {
-  if (arg(0) == 'node') {
-    if (is_numeric(arg(1))) {
-      $node = node_load(arg(1));
-      if (is_array($node->taxonomy)) {
-        $terms = array();
-        foreach ($node->taxonomy as $term) {
-          $terms[] = $term->name;
-        }
-        drupal_set_html_head('  <meta name="keywords" content="' . implode(", ", $terms) . '" />');
 
-      }
-    }
-  }
-}
 
 /**
  * This function thmes a Block which contains all Terms of one Node
