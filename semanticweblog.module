@@ -11,6 +11,7 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
+* @todo Add local Task 'url aliases' for Terms 
 * @todo More Admin Settings.
 * @todo Nodes linking to me.
 * @todo Do more Documentation.

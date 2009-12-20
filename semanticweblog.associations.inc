@@ -220,7 +220,7 @@ function semanticweblog_load_all_terms($tids) {
   return $items;
 }
 
-function semanaticweblog_get_all_associations($paged) {
+function semanaticweblog_get_associations($paged) {
   $types = semanticweblog_load_all_types();
   if($paged){
     $assocs = semanticweblog_load_all_associations_paged();
