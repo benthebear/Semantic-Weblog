@@ -135,11 +135,11 @@ function theme_semanticweblog_register_alphabet($vid, $letter = "A") {
 
 function semanticweblog_administer_associationtypes() {
   $output = "";
-  $types = semanticweblog_load_all_types();
+  $types = semanticweblog_get_all_types();
   foreach ($types as $type) {
-    $rows[] = array($type["atid"], $type["name"], $type["role1"], $type["role2"], l("edit", "admin/content/associationtype/" . $type["atid"] . "/edit") . " | " . l("delete", "admin/content/associationtype/" . $type["atid"] . "/delete") );
+    $rows[] = array($type["atid"], $type["name"], $type["role1"], $type["role2"], $type["sentence"], l("edit", "admin/content/associationtype/" . $type["atid"] . "/edit") . " | " . l("delete", "admin/content/associationtype/" . $type["atid"] . "/delete") );
   }
-  $output .=  theme_table(array("No.", "Name", "First Role", "Second Role", "Actions"), $rows);
+  $output .=  theme_table(array("No.", "Name", "First Role", "Second Role", "Sentence", "Actions"), $rows);
   $output .= drupal_get_form("semanticweblog_manage_association_types");
   return $output;
 }
@@ -162,7 +162,7 @@ function semanticweblog_administer_associationtypes_edit($atid) {
 function semanticweblog_administer_associationtypes_delete($atid) {
   $output = "";
   $atid = arg(3);
-  $ats = semanticweblog_load_all_types();
+  $ats = semanticweblog_get_all_types();
   $myat = $ats[$atid];
   $output .= "Are you really sure, you want to delete Association Type No. " . $atid . " '" . $myat['name'] . "'";
   $output .= drupal_get_form("semanticweblog_delete_association_type");
@@ -190,8 +190,7 @@ function semanticweblog_administer_associations() {
   }else{
     $pager = FALSE;
   }
-  $assocs = semanaticweblog_get_associations($pager);
-  
+  $assocs = semanaticweblog_get_associations($pager);  
   foreach ($assocs as $assoc) {
     $rows[] = array(
       $assoc["member1"]["role"],
@@ -219,7 +218,7 @@ function semanticweblog_administer_associations() {
 function semanticweblog_add_add_association($term1, $atid, $term2){
   $termid1 = semanticweblog_term2tid($term1);
   $termid2 = semanticweblog_term2tid($term2);
-  $types = semanticweblog_load_all_types();
+  $types = semanticweblog_get_all_types();
   
   if(is_numeric($termid1) and is_numeric($termid2) and is_numeric($atid) and !semanticweblog_exists_association ($termid1, $atid, $termid2)) {
      print "Association  Created: " . $term1 . "(" . $termid1 . ") – " . $types[$atid]["name"] . " (" . $atid . ")" . " – " . $term2 . "(" . $termid2. ")";

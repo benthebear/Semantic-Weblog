@@ -11,15 +11,17 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
-* @todo Add local Task 'url aliases' for Terms 
+* @todo Add warning, when no Association Type exists
+* @todo Add warning, when no Lexicon Vocabulary has been choosen
+* @todo Add helptext
+* @todo Improve Term Description use.
+* @todo Add local Task 'url aliases' for Terms.
 * @todo More Admin Settings.
 * @todo Nodes linking to me.
 * @todo Do more Documentation.
 * @todo Chache semanticweblog_load_all_types() DB-Request.
-* @todo Check for double Assocs.
-* @todo Add Tripel-Store and accompaning functions.
 * @todo Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
-* @todo Remove all non-hook functions from the file.
+* @todo Remove all non-hook, non-theme functions from the file.
 *
 */
 
@@ -48,6 +50,9 @@
 // Including non-regular Files
 include("semanticweblog.types.inc");
 include("semanticweblog.associations.inc");
+
+// Global Variable
+global $semanticweblog_association_types;
 
 // Add CSS
 drupal_add_js(drupal_get_path('module', 'semanticweblog') . '/semanticweblog.js');
@@ -217,6 +222,12 @@ function semanticweblog_admin_settings() {
     '#description' => t('The Number of Associations per Page on the Association Admin Page'),
     '#options' => $pager_options,
   );
+  $form['semanticweblog']['semanticweblog_bulk_separator'] = array('#type' => 'textfield',
+    '#title' => t('Separator for Bulk-Uploads'),
+    '#default_value' => variable_get('semanticweblog_bulk_separator', "#"),
+    '#size' => 30,
+    '#description' => t('The Separator for you natural language bulk upload of Associations'),
+  );
   return system_settings_form($form);
 }
 
@@ -232,15 +243,20 @@ function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
       'info' => t('Semantic Weblog: Nodes Terms'),
     );
     $blocks[1] = array(
-      'info' => t('Semantic Weblog: Create Association'),
+      'info' => t('Semantic Weblog: Create Association Ajax'),
     );
-
+    $blocks[2] = array(
+      'info' => t('Semantic Weblog: Create Association Bulk'),
+    );
     return $blocks;
   }
+
   else if ($op == 'configure' && $delta == 0) {
   }
+
   else if ($op == 'save' && $delta == 0) {
   }
+
   else if ($op == 'view') {
     switch ($delta) {
       case 0:
@@ -261,6 +277,13 @@ function semanticweblog_block($op = 'list', $delta = 0, $edit = array()) {
         $block = array(
           'subject' => t('Create an Association'),
           'content' => semanticweblog_block_add_association_ajax(),
+          );
+      break;
+
+      case 2:
+        $block = array(
+          'subject' => t('Create multiple Associations'),
+          'content' => semanticweblog_block_add_association_bulk(),
           );
       break;
 
@@ -346,12 +369,25 @@ function semanticweblog_extend_head() {
           $terms[] = $term->name;
         }
         drupal_set_html_head('  <meta name="keywords" content="' . implode(", ", $terms) . '" />');
-
       }
     }
   }
 }
 
+
+/**
+ * Implementation of hook_taxonomy
+ *
+ * We have to delete all Associations if a term is beeing deleted
+ */
+function semanticweblog_taxonomy($op, $type, $array = NULL){
+  //dprint_r($array);
+  $termid = $array["tid"];
+  if($op="delete" and $type="term" and is_numeric($termid)){
+   db_query("DELETE FROM {semanticweblog_associations} WHERE member1tid = %d or member2tid = %d", $termid, $termid);
+   drupal_set_message(t('All Associations of the term have been deleted.'));
+  }
+}
 
 // Theming
 

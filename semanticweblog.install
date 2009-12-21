@@ -58,6 +58,12 @@ function semanticweblog_schema() {
         'size' => 'big',
         'description' => t('The role of the second memeber of the association type'),
       ),
+       'sentence' => array(
+          'type' => 'text',
+          'not null' => FALSE,
+          'size' => 'big',
+          'description' => t('The sentence to be formed by this association type'),
+        ),
     ),
     'primary key' => array('atid')
   );
