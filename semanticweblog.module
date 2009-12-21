@@ -28,6 +28,9 @@
 /**
 * History
 *
+* 2009 12 21: Added deletion of Associations when a term is deleted
+* 2009 12 21: Added Bulk Creation of Associations
+* 2009 12 20: Added Sentence for Association Types
 * 2009 12 19: Added Pager on Association Administer Page
 * 2009 12 19: Renamed the form elementes of the two association creation forms
 * 2009 12 19: Added Delete function for Associations.
