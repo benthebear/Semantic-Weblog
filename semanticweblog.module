@@ -19,7 +19,6 @@
 * @todo More Admin Settings.
 * @todo Nodes linking to me.
 * @todo Do more Documentation.
-* @todo Chache semanticweblog_load_all_types() DB-Request.
 * @todo Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
 * @todo Remove all non-hook, non-theme functions from the file.
 *
@@ -29,7 +28,9 @@
 * History
 *
 * 2009 12 21: Added deletion of Associations when a term is deleted
-* 2009 12 21: Added Bulk Creation of Associations
+* 2009 12 21: Added Bulk Block Creation for Association Creation
+* 2009 12 20: Chache semanticweblog_load_all_types() DB-Request
+* 2009 12 20: Added name2id function for Association Types
 * 2009 12 20: Added Sentence for Association Types
 * 2009 12 19: Added Pager on Association Administer Page
 * 2009 12 19: Renamed the form elementes of the two association creation forms
@@ -386,7 +387,7 @@ function semanticweblog_extend_head() {
 function semanticweblog_taxonomy($op, $type, $array = NULL){
   //dprint_r($array);
   $termid = $array["tid"];
-  if($op="delete" and $type="term" and is_numeric($termid)){
+  if($op=="delete" and $type=="term" and is_numeric($termid)){
    db_query("DELETE FROM {semanticweblog_associations} WHERE member1tid = %d or member2tid = %d", $termid, $termid);
    drupal_set_message(t('All Associations of the term have been deleted.'));
   }
