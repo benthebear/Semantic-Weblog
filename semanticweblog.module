@@ -60,6 +60,7 @@
 // Including non-regular Files
 include("semanticweblog.types.inc");
 include("semanticweblog.associations.inc");
+include("semanticweblog.api.inc");
 
 // Global Variable
 global $semanticweblog_association_types;
