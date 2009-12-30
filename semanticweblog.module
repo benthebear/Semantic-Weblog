@@ -33,22 +33,22 @@
 /**
 * History
 *
-* 2009 12 21: Added deletion of Associations when a term is deleted
-* 2009 12 21: Added Bulk Block Creation for Association Creation
-* 2009 12 20: Chache semanticweblog_load_all_types() DB-Request
-* 2009 12 20: Added name2id function for Association Types
-* 2009 12 20: Added Sentence for Association Types
-* 2009 12 19: Added Pager on Association Administer Page
-* 2009 12 19: Renamed the form elementes of the two association creation forms
-* 2009 12 19: Added Delete function for Associations.
-* 2009 12 19: Added double Association prevention
-* 2009 12 18: Added Ajax Block for Association Creation
-* 2009 12 14: Added Module Settings
-* 2009 12 13: Added new Association Type Creations, Editing, Deleting
-* 2009 11 22: Added local tasks to terms page (from old module)
-* 2009 11 22: Added Nodes' Terms Block (from old module)
-* 2009 11 22: Added Register (from old module)
-* 2009 11 22: Recreated this Module
+* 2009 12 21 [ben]: Added deletion of Associations when a term is deleted
+* 2009 12 21 [ben]: Added Bulk Block Creation for Association Creation
+* 2009 12 20 [ben]: Chache semanticweblog_load_all_types() DB-Request
+* 2009 12 20 [ben]: Added name2id function for Association Types
+* 2009 12 20 [ben]: Added Sentence for Association Types
+* 2009 12 19 [ben]: Added Pager on Association Administer Page
+* 2009 12 19 [ben]: Renamed the form elementes of the two association creation forms
+* 2009 12 19 [ben]: Added Delete function for Associations.
+* 2009 12 19 [ben]: Added double Association prevention
+* 2009 12 18 [ben]: Added Ajax Block for Association Creation
+* 2009 12 14 [ben]: Added Module Settings
+* 2009 12 13 [ben]: Added new Association Type Creations, Editing, Deleting
+* 2009 11 22 [ben]: Added local tasks to terms page (from old module)
+* 2009 11 22 [ben]: Added Nodes' Terms Block (from old module)
+* 2009 11 22 [ben]: Added Register (from old module)
+* 2009 11 22 [ben]: Recreated this Module
 *
 */
 
