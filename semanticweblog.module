@@ -11,6 +11,11 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
+* @todo Add advanced search to the association admin
+* @todo Add functions and pages for massediting of associations
+* @todo Add functions for adding association from within the register
+* @todo Add Associations to Term-Pages
+* @todo Add API to request association information inside Themes and other Modules
 * @todo Add warning, when no Association Type exists
 * @todo Add warning, when no Lexicon Vocabulary has been choosen
 * @todo Add helptext
@@ -19,7 +24,8 @@
 * @todo More Admin Settings.
 * @todo Nodes linking to me.
 * @todo Do more Documentation.
-* @todo Add Filter and Template Tag for including Topic information into Text-Body. See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
+* @todo Add Filter and Template Tag for including Topic information into Text-Body. 
+*       See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
 * @todo Remove all non-hook, non-theme functions from the file.
 *
 */
