@@ -345,21 +345,15 @@ function semanticweblog_insert_association ($member1, $assoctype, $member2) {
 // Functions for loading and displaying Associations.
 
 function semanticweblog_load_all_associations() {
-  $result = db_query("SELECT * FROM {semanticweblog_associations}");
-  $items = array();
-  while ($item = db_fetch_array($result)) {
-    $items[$item['aid']] = $item;
-  }
+  $result = db_query("SELECT * FROM {semanticweblog_associations}");  
+  $items = semanticweblog_association_result2items($result);
   return $items;
 }
 
 function semanticweblog_load_all_associations_paged() {
   $limit = variable_get('semanticweblog_admin_associations_pager', "10");
   $result = pager_query("SELECT * FROM {semanticweblog_associations}", $limit, $element = 0, $count_query = NULL);
-  $items = array();
-  while ($item = db_fetch_array($result)) {
-    $items[$item['aid']] = $item;
-  }
+  $items = semanticweblog_association_result2items($result);
   return $items;
 }
 
@@ -373,10 +367,19 @@ function semanticweblog_load_all_terms($tids) {
     $where = implode(" or ", $strings);
     $sql .= $where;
     $result = db_query($sql);
-    $items = array();
-    while ($item = db_fetch_array($result)) {
+    $$items = array();
+    while ($item = db_fetch_array($result)) {     
       $items[$item['tid']] = $item["name"];
     }
+  }
+  return $items;
+}
+
+function semanticweblog_association_result2items($result){
+  $items = array();
+  while ($item = db_fetch_array($result)) {
+    //dprint_r($item);
+    $items[$item['aid']] = $item;
   }
   return $items;
 }
@@ -388,23 +391,29 @@ function semanticweblog_load_all_terms($tids) {
  * @return array $all All or some Associations
  */
 function semanaticweblog_get_associations($paged) {
-  // First load all Association types
-  $types = semanticweblog_get_all_types();
+ 
   
   // Get all oer some Associations
   $assocs = array();
   if($paged){
-    $assocs = semanticweblog_load_all_associations_paged();
+    $associations = semanticweblog_load_all_associations_paged();
   }else{
-    $assocs = semanticweblog_load_all_associations();
+    $associations = semanticweblog_load_all_associations();
   }
+  return semanticweblog_types_and_associations2array($associations);
   
+}
+
+function semanticweblog_types_and_associations2array($associations){  
+  // First load all Association types
+  $types = semanticweblog_get_all_types();
+   
   // Create the (still empty) result array
   $result = array();
   
-  if(count($assocs)>0){
+  if(count($associations)>0){
     // Gather all needed Termids
-    foreach ($assocs as $assoc) {
+    foreach ($associations as $assoc) {
       $tids[] = $assoc["member1tid"];
       $tids[] = $assoc["member2tid"];
     }
@@ -413,10 +422,11 @@ function semanaticweblog_get_associations($paged) {
   
     // Build the result array
  
-    foreach ($assocs as $myass) {
+    foreach ($associations as $myass) {
       // Build the type of this Association
       $myass["type"]["atid"] = $myass["member1tid"];
       $myass["type"]["name"] = $types[$myass["atid"]]["name"];
+      $myass["type"]["sentence"] = $types[$myass["atid"]]["sentence"];
       $myass["type"]["role1"] = $types[$myass["atid"]]["role1"];
       $myass["type"]["role2"] = $types[$myass["atid"]]["role2"];
       // Build the first member of this Associattion

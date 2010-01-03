@@ -450,11 +450,23 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     $term = taxonomy_get_term($tids[0]);
     // Add Keywords to the header.
     drupal_set_html_head('  <meta name="keywords" content="' . $term->name  .'" />');
+    
+    // Add Description
     $output .= '<div class="taxonomy-term-description">';
     $output .= filter_xss_admin($term->description);
-    //$output .= _semanticweblog_taxonomy_term_page($tids);
-        //$output .= '<h3>'.t("Nodes on the topic")." &raquo;".$term->name.'&laquo;</h3>';
     $output .= '</div>';
+    
+    // Add Associations
+    $output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
+    $output .= '<div class="taxonomy-term-associations">';   
+    $associations = semanticweblog_term_get_all_associations($term->tid);    
+    foreach ($associations as $assoc) {
+        $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>";       
+    }   
+    $output .= '</div>';
+    
+    // A Title for the Nodes
+    $output .= '<h2 class="taxonomy-term-content-title">' . t('Content on the Topic') . '</h2>';
   }
 
   $output .= taxonomy_render_nodes($result);
