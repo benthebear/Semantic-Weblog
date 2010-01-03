@@ -18,17 +18,41 @@
 * 2009 12 30 [ben]: Created this file
 */
 
-function semanticweblog_term_get_own_associations($termid){
-  
+/**
+* This function get's all Associations in which a give Term is the first member (upwards)
+*
+* @param termid integer The ID of the given Term
+* @return associations array An Array with all necessary Information of the Associations.
+* @see semanticweblog_term_get_foreign_associations(), semanticweblog_term_get_all_associations()
+*/
+function semanticweblog_api_term_get_own_associations($termid){
+  $result = db_query("SELECT * FROM {semanticweblog_associations} WHERE member1tid = %d ", $termid);
+  $raw_associations = semanticweblog_association_result2items($result);
+  return semanticweblog_types_and_associations2array($raw_associations);
 }
 
-function semanticweblog_term_get_foreign_associations($termid){
-  
+/**
+* This function get's all Associations in which a give Term is the second member (downwards)
+*
+* @param termid integer The ID of the given Term
+* @return associations array An Array with all necessary Information of the Associations.
+* @see semanticweblog_term_get_own_associations(), semanticweblog_term_get_all_associations()
+*/
+function semanticweblog_api_term_get_foreign_associations($termid){
+  $result = db_query("SELECT * FROM {semanticweblog_associations} WHERE member2tid = %d", $termid);
+  $raw_associations = semanticweblog_association_result2items($result);
+  return semanticweblog_types_and_associations2array($raw_associations);
 }
 
-function semanticweblog_term_get_all_associations($termid){  
+/**
+* This function get's all Associations in which a give Term is a member
+*
+* @param termid integer The ID of the given Term
+* @return associations array An Array with all necessary Information of the Associations.
+* @see semanticweblog_term_get_own_associations(), semanticweblog_term_get_foreign_associations()
+*/
+function semanticweblog_api_term_get_all_associations($termid){  
   $result = db_query("SELECT * FROM {semanticweblog_associations} WHERE member1tid = %d or member2tid = %d", $termid, $termid);
-  $associations = semanticweblog_association_result2items($result);
-  //dprint_r($associations);
-  return semanticweblog_types_and_associations2array($associations);
+  $raw_associations = semanticweblog_association_result2items($result);
+  return semanticweblog_types_and_associations2array($raw_associations);
 }

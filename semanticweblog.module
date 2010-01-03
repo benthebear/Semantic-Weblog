@@ -11,6 +11,7 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
+* @todo Make the Output on the taxonomy/term pages configurable via Admins settings.
 * @todo Add advanced search to the association admin
 * @todo Add functions and pages for massediting of associations
 * @todo Add functions for adding association from within the register
@@ -33,6 +34,10 @@
 /**
 * History
 *
+* 2010 01 03 [ben]: Added some Documentation and some refactoring
+* 2010 01 03 [ben]: Added first Output of Associations on the taxonomy/term pages.
+* 2010 01 03 [ben]: Minor Refactoring in the semanticweblog.association.inc
+* 2009 12 30 [ben]: Added API File for all non-hook, non-theme functions to be used outside of the module
 * 2009 12 21 [ben]: Added deletion of Associations when a term is deleted
 * 2009 12 21 [ben]: Added Bulk Block Creation for Association Creation
 * 2009 12 20 [ben]: Chache semanticweblog_load_all_types() DB-Request
@@ -51,6 +56,46 @@
 * 2009 11 22 [ben]: Recreated this Module
 *
 */
+
+/**
+* About the use of this module
+*
+* There are some basic Arrays, which a used as parameter for several functions
+*
+* #1 raw_associations
+*
+* This array is a direkt output of one row from the semanticweblog_association table.
+*
+* $raw_associations[$aid]["aid"] = ID of the Association
+* $raw_associations[$aid]["uid"] = ID of the user who created it
+* $raw_associations[$aid]["member1tid"] = ID of the first (downward) Term
+* $raw_associations[$aid]["atid"] = ID of the Association Type
+* $raw_associations[$aid]["member2tid"] = ID of the second (upward) Term
+* $raw_associations[$aid]["created"] = TIMESTAMP of the date the association was created
+*
+* # 2 rich_associations
+*
+* This is a more complex Array, containing the Names of the Terms and Association Types
+*
+* // The type of this Association
+* $rich_associations[$aid]["type"]["atid"] = ID of the Association Type
+* $rich_associations[$aid]["type"]["name"] = Name of the Association Type
+* $rich_associations[$aid]["type"]["sentence"] = Sentence Version of the Association Type
+* $rich_associations[$aid]["type"]["role1"] = First Role of the Association Type
+* $rich_associations[$aid]["type"]["role2"] = Second of the Association Type
+* // The first member of this Associattion
+* $rich_associations[$aid]["member1"]["tid"] = ID of the first (downward) Term
+* $rich_associations[$aid]["member1"]["name"] = Name of the first (downward) Term
+* $rich_associations[$aid]["member1"]["role"] = Role of the first (downward) Term
+* // The second memeber of this Association
+* $rich_associations[$aid]["member2"]["tid"] = ID of the second (upward) Term
+* $rich_associations[$aid]["member2"]["name"] = Name of the second (upward) Term
+* $rich_associations[$aid]["member2"]["role"] = Role of the second (upward) Term
+* 
+* 
+*
+*/
+
 
 
 // To rebuild the menu and the theme registry during development
@@ -459,9 +504,13 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     // Add Associations
     $output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
     $output .= '<div class="taxonomy-term-associations">';   
-    $associations = semanticweblog_term_get_all_associations($term->tid);    
-    foreach ($associations as $assoc) {
+    $associations = semanticweblog_api_term_get_all_associations($term->tid);    
+    if(count($associations)>0){
+      foreach ($associations as $assoc) {
         $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>";       
+        }
+    }else{
+      $output .= t('This Term has no Associations yet.');
     }   
     $output .= '</div>';
     

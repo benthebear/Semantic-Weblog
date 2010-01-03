@@ -344,19 +344,35 @@ function semanticweblog_insert_association ($member1, $assoctype, $member2) {
 
 // Functions for loading and displaying Associations.
 
+/**
+* Loads all, really all raw Associations
+*
+* @return array $raw_associations A raw association array
+*/
 function semanticweblog_load_all_associations() {
   $result = db_query("SELECT * FROM {semanticweblog_associations}");  
-  $items = semanticweblog_association_result2items($result);
-  return $items;
+  $raw_associations = semanticweblog_association_result2items($result);
+  return $raw_associations;
 }
 
+/**
+* Loads all all raw Associations, paginated
+*
+* @return array $raw_associations A raw association array
+*/
 function semanticweblog_load_all_associations_paged() {
   $limit = variable_get('semanticweblog_admin_associations_pager', "10");
   $result = pager_query("SELECT * FROM {semanticweblog_associations}", $limit, $element = 0, $count_query = NULL);
-  $items = semanticweblog_association_result2items($result);
-  return $items;
+  $raw_associations = semanticweblog_association_result2items($result);
+  return $raw_associations;
 }
 
+/**
+* Loads the term-IDs and Names of a given Set of Terms
+* 
+* @param array $tids An numeric Array containing Term-IDs
+* @return array $rich_terms A associative Array containing all IDs and Names of the given Terms.
+*/
 function semanticweblog_load_all_terms($tids) {
   $items = array();
   if(is_array($tids)){
@@ -367,21 +383,34 @@ function semanticweblog_load_all_terms($tids) {
     $where = implode(" or ", $strings);
     $sql .= $where;
     $result = db_query($sql);
-    $$items = array();
+    $rich_terms = array();
     while ($item = db_fetch_array($result)) {     
-      $items[$item['tid']] = $item["name"];
+      $rich_terms[$item['tid']] = $item["name"];
     }
   }
-  return $items;
+  return $rich_terms;
 }
 
+/**
+* A helper function, converting a DB-Result-Resource into an raw_association array
+*
+* $raw_associations[$aid]["aid"] = ID of the Association
+* $raw_associations[$aid]["uid"] = ID of the user who created it
+* $raw_associations[$aid]["member1tid"] = ID of the first (downward) Term
+* $raw_associations[$aid]["atid"] = ID of the Association Type
+* $raw_associations[$aid]["member2tid"] = ID of the second (upward) Term
+* $raw_associations[$aid]["created"] = TIMESTAMP of the date the association was created
+*
+* @param db-result-resource $result A Database Result-Resource
+* @return array $raw_associations A raw association array
+*/
 function semanticweblog_association_result2items($result){
-  $items = array();
+  $raw_associations = array();
   while ($item = db_fetch_array($result)) {
     //dprint_r($item);
-    $items[$item['aid']] = $item;
+    $raw_associations[$item['aid']] = $item;
   }
-  return $items;
+  return $raw_associations;
 }
 
 /**
@@ -396,24 +425,59 @@ function semanaticweblog_get_associations($paged) {
   // Get all oer some Associations
   $assocs = array();
   if($paged){
-    $associations = semanticweblog_load_all_associations_paged();
+    $raw_associations = semanticweblog_load_all_associations_paged();
   }else{
-    $associations = semanticweblog_load_all_associations();
+    $raw_associations = semanticweblog_load_all_associations();
   }
-  return semanticweblog_types_and_associations2array($associations);
+  return semanticweblog_types_and_associations2array($raw_associations);
   
 }
 
-function semanticweblog_types_and_associations2array($associations){  
+
+/**
+* Delivers complete Information on a set of Assiciations.
+*
+* This function expects an array, which is the result of 
+* an db_fetch_array on an SQL Select on the semanticweblog_associations Query.
+*
+* $raw_associations[$aid]["aid"] = ID of the Association
+* $raw_associations[$aid]["uid"] = ID of the user who created it
+* $raw_associations[$aid]["member1tid"] = ID of the first (downward) Term
+* $raw_associations[$aid]["atid"] = ID of the Association Type
+* $raw_associations[$aid]["member2tid"] = ID of the second (upward) Term
+* $raw_associations[$aid]["created"] = TIMESTAMP of the date the association was created
+*
+* The result is a more complex Array, containing the Names of the Terms and Association Types
+*
+* // The type of this Association
+* $rich_associations[$aid]["type"]["atid"] = ID of the Association Type
+* $rich_associations[$aid]["type"]["name"] = Name of the Association Type
+* $rich_associations[$aid]["type"]["sentence"] = Sentence Version of the Association Type
+* $rich_associations[$aid]["type"]["role1"] = First Role of the Association Type
+* $rich_associations[$aid]["type"]["role2"] = Second of the Association Type
+* // The first member of this Associattion
+* $rich_associations[$aid]["member1"]["tid"] = ID of the first (downward) Term
+* $rich_associations[$aid]["member1"]["name"] = Name of the first (downward) Term
+* $rich_associations[$aid]["member1"]["role"] = Role of the first (downward) Term
+* // The second memeber of this Association
+* $rich_associations[$aid]["member2"]["tid"] = ID of the second (upward) Term
+* $rich_associations[$aid]["member2"]["name"] = Name of the second (upward) Term
+* $rich_associations[$aid]["member2"]["role"] = Role of the second (upward) Term
+*
+* @param array $associations An Array, representing the rows in the association table
+* @return array $result A more complex Array, containing Names of all Terms and Association types
+*
+*/
+function semanticweblog_types_and_associations2array($raw_associations){  
   // First load all Association types
   $types = semanticweblog_get_all_types();
    
   // Create the (still empty) result array
-  $result = array();
+  $rich_associations = array();
   
-  if(count($associations)>0){
+  if(count($raw_associations)>0){
     // Gather all needed Termids
-    foreach ($associations as $assoc) {
+    foreach ($raw_associations as $assoc) {
       $tids[] = $assoc["member1tid"];
       $tids[] = $assoc["member2tid"];
     }
@@ -422,7 +486,7 @@ function semanticweblog_types_and_associations2array($associations){
   
     // Build the result array
  
-    foreach ($associations as $myass) {
+    foreach ($raw_associations as $myass) {
       // Build the type of this Association
       $myass["type"]["atid"] = $myass["member1tid"];
       $myass["type"]["name"] = $types[$myass["atid"]]["name"];
@@ -438,10 +502,10 @@ function semanticweblog_types_and_associations2array($associations){
       $myass["member2"]["name"] = $terms[$myass["member2tid"]];
       $myass["member2"]["role"] = $myass["type"]["role2"];
       // Add this association to the results
-      $result[$myass["aid"]] = $myass;
+      $rich_associations[$myass["aid"]] = $myass;
     }
   }
-  return $result;
+  return $rich_associations;
 }
 
 // Functions for delete an association
