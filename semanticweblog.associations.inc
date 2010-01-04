@@ -484,7 +484,7 @@ function semanticweblog_types_and_associations2array($raw_associations){
     // Get all need neede Term-Names by their IDs
     $terms = semanticweblog_load_all_terms($tids);
   
-    // Build the result array
+    // Build the rich_association array
  
     foreach ($raw_associations as $myass) {
       // Build the type of this Association

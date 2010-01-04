@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id$
 
 /* Author: Benjamin Birkenhake <benjamin@birkenhake.org>*/
