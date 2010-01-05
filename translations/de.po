@@ -1,0 +1,401 @@
+# $Id$
+#
+# German translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  semanticweblog.associations.inc: n/a
+#  semanticweblog.module: n/a
+#  semanticweblog.pages.inc: n/a
+#  semanticweblog.types.inc: n/a
+#  semanticweblog.info: n/a
+#  semanticweblog.install: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2010-01-05 10:50+0100\n"
+"PO-Revision-Date: 2010-01-05 10:50+0100\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: German <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: semanticweblog.associations.inc:72;161;214 semanticweblog.module:238
+msgid "Add an Association"
+msgstr ""
+
+#: semanticweblog.associations.inc:76;165
+msgid "First Member"
+msgstr ""
+
+#: semanticweblog.associations.inc:91;180
+msgid "Association Type"
+msgstr ""
+
+#: semanticweblog.associations.inc:100;189
+msgid "Second Memeber"
+msgstr ""
+
+#: semanticweblog.associations.inc:110
+msgid "Create new Association"
+msgstr ""
+
+#: semanticweblog.associations.inc:120
+msgid "Your Association needs an Association Type."
+msgstr ""
+
+#: semanticweblog.associations.inc:123 semanticweblog.pages.inc:229
+msgid "Your Association needs a first Member."
+msgstr ""
+
+#: semanticweblog.associations.inc:126 semanticweblog.pages.inc:232
+msgid "Your Association needs a second Member."
+msgstr ""
+
+#: semanticweblog.associations.inc:131 semanticweblog.pages.inc:235
+msgid "Your Association already exists."
+msgstr ""
+
+#: semanticweblog.associations.inc:144
+msgid "Your association has been saved."
+msgstr ""
+
+#: semanticweblog.associations.inc:218
+msgid "Type your Associations"
+msgstr ""
+
+#: semanticweblog.associations.inc:221
+msgid "Enter your Associations. One line for each Association."
+msgstr ""
+
+#: semanticweblog.associations.inc:221
+msgid "Use the Separator:"
+msgstr ""
+
+#: semanticweblog.associations.inc:221
+msgid "Example: Star Wars # is a # Movie"
+msgstr ""
+
+#: semanticweblog.associations.inc:226
+msgid "Create new Associations"
+msgstr ""
+
+#: semanticweblog.associations.inc:238
+msgid "You haven't entered any association."
+msgstr ""
+
+#: semanticweblog.associations.inc:271
+msgid "Added the following Association."
+msgstr ""
+
+#: semanticweblog.associations.inc:274
+msgid "The followin Association already exists."
+msgstr ""
+
+#: semanticweblog.associations.inc:278;282
+msgid "The following line could not be read."
+msgstr ""
+
+#: semanticweblog.associations.inc:289
+msgid "Associations have been created."
+msgstr ""
+
+#: semanticweblog.associations.inc:294
+msgid "Associations couldn't be created."
+msgstr ""
+
+#: semanticweblog.associations.inc:298
+msgid "No association has been created."
+msgstr ""
+
+#: semanticweblog.associations.inc:531
+msgid "Delete this Association"
+msgstr ""
+
+#: semanticweblog.associations.inc:542
+msgid "Your association has been deleted."
+msgstr ""
+
+#: semanticweblog.pages.inc:107
+msgid "There are no Terms starting with that Letter in this vocabulary."
+msgstr ""
+
+#: semanticweblog.pages.inc:227
+msgid "Error"
+msgstr "Fehler"
+
+#: semanticweblog.pages.inc:251
+msgid "Are you really sure, you want to delete the Association"
+msgstr ""
+
+#: semanticweblog.types.inc:52;125
+msgid "Association Type Name"
+msgstr ""
+
+#: semanticweblog.types.inc:56;129
+msgid "Enter a name for the Association type"
+msgstr ""
+
+#: semanticweblog.types.inc:59;132
+msgid "Association First Role"
+msgstr ""
+
+#: semanticweblog.types.inc:63;136
+msgid "Enter a name for the firste Role of the Association type"
+msgstr ""
+
+#: semanticweblog.types.inc:66;139;146
+msgid "Association Second Role"
+msgstr ""
+
+#: semanticweblog.types.inc:70;143;150
+msgid "Enter a name for the second Role of the Association type"
+msgstr ""
+
+#: semanticweblog.types.inc:73
+msgid "Sentence"
+msgstr ""
+
+#: semanticweblog.types.inc:77
+msgid "Enter a sentence of the type \"term1 verb term2\""
+msgstr ""
+
+#: semanticweblog.types.inc:80
+msgid "Create new Association Type"
+msgstr ""
+
+#: semanticweblog.types.inc:87;163
+msgid "Your Association Type needs a Name."
+msgstr ""
+
+#: semanticweblog.types.inc:90;166
+msgid "Your Association Type needs a first Role."
+msgstr ""
+
+#: semanticweblog.types.inc:93;169
+msgid "Your Association Type needs a second Role."
+msgstr ""
+
+#: semanticweblog.types.inc:96
+msgid "Your Association Type needs a Sentence."
+msgstr ""
+
+#: semanticweblog.types.inc:106
+msgid "Your association type has been saved."
+msgstr ""
+
+#: semanticweblog.types.inc:156
+msgid "Edit this Association Type"
+msgstr ""
+
+#: semanticweblog.types.inc:172
+msgid "Your Association Type needs a sentence."
+msgstr ""
+
+#: semanticweblog.types.inc:187
+msgid "Your association type has been edited."
+msgstr ""
+
+#: semanticweblog.types.inc:202
+msgid "Delete this Association Type"
+msgstr ""
+
+#: semanticweblog.types.inc:214
+msgid "Your association type has been deleted."
+msgstr ""
+
+#: semanticweblog.module:261
+msgid "Lexicon Vocabulary"
+msgstr ""
+
+#: semanticweblog.module:264
+msgid "Which Vocabulary shall be your Lexicon?"
+msgstr ""
+
+#: semanticweblog.module:275
+msgid "No. of Assciations per Page"
+msgstr ""
+
+#: semanticweblog.module:278
+msgid "The Number of Associations per Page on the Association Admin Page"
+msgstr ""
+
+#: semanticweblog.module:282
+msgid "Separator for Bulk-Uploads"
+msgstr ""
+
+#: semanticweblog.module:285
+msgid "The Separator for you natural language bulk upload of Associations"
+msgstr ""
+
+#: semanticweblog.module:299
+msgid "Semantic Weblog: Nodes Terms"
+msgstr ""
+
+#: semanticweblog.module:302
+msgid "Semantic Weblog: Create Association Ajax"
+msgstr ""
+
+#: semanticweblog.module:305
+msgid "Semantic Weblog: Create Association Bulk"
+msgstr ""
+
+#: semanticweblog.module:323
+msgid "Node Terms"
+msgstr ""
+
+#: semanticweblog.module:334
+msgid "Create an Association"
+msgstr ""
+
+#: semanticweblog.module:341
+msgid "Create multiple Associations"
+msgstr ""
+
+#: semanticweblog.module:444
+msgid "All Associations of the term have been deleted."
+msgstr ""
+
+#: semanticweblog.module:505
+msgid "Associations of this Term"
+msgstr ""
+
+#: semanticweblog.module:513
+msgid "This Term has no Associations yet."
+msgstr ""
+
+#: semanticweblog.module:518
+msgid "Content on the Topic"
+msgstr "Inhalt dieses Topics"
+
+#: semanticweblog.module:531
+msgid "Edit term"
+msgstr "Begriff bearbeiten"
+
+#: semanticweblog.module:123
+msgid "access semanticweblog"
+msgstr ""
+
+#: semanticweblog.module:123
+msgid "administer semanticweblog"
+msgstr ""
+
+#: semanticweblog.module:137 semanticweblog.info:0;0
+msgid "Semantic Weblog"
+msgstr ""
+
+#: semanticweblog.module:138
+msgid "Several Settings for your Semantic Weblog"
+msgstr ""
+
+#: semanticweblog.module:147;156;165
+msgid "Register"
+msgstr ""
+
+#: semanticweblog.module:148;157;166
+msgid "The Register of a single Vocabulary"
+msgstr ""
+
+#: semanticweblog.module:174
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: semanticweblog.module:175
+msgid "Edit this Term"
+msgstr ""
+
+#: semanticweblog.module:182
+msgid "View"
+msgstr "Anzeigen"
+
+#: semanticweblog.module:183
+msgid "View this Term"
+msgstr ""
+
+#: semanticweblog.module:192;200;209
+msgid "Association Types"
+msgstr ""
+
+#: semanticweblog.module:193
+msgid "Add, edit and delete Association Types"
+msgstr ""
+
+#: semanticweblog.module:202
+msgid "Edit an Association Type"
+msgstr ""
+
+#: semanticweblog.module:211
+msgid "Delete an Association Type"
+msgstr ""
+
+#: semanticweblog.module:219;227;236
+msgid "Associations"
+msgstr ""
+
+#: semanticweblog.module:220
+msgid "Add, edit and delete Associations"
+msgstr ""
+
+#: semanticweblog.module:228
+msgid "Delete an Associations"
+msgstr ""
+
+#: semanticweblog.install:35
+msgid "Stores association types."
+msgstr ""
+
+#: semanticweblog.install:41
+msgid "Primary key: ID."
+msgstr ""
+
+#: semanticweblog.install:47
+msgid "The name of the association type"
+msgstr ""
+
+#: semanticweblog.install:53
+msgid "The role of the first memeber of the association type"
+msgstr ""
+
+#: semanticweblog.install:59
+msgid "The role of the second memeber of the association type"
+msgstr ""
+
+#: semanticweblog.install:65
+msgid "The sentence to be formed by this association type"
+msgstr ""
+
+#: semanticweblog.install:71
+msgid "Stores associations."
+msgstr ""
+
+#: semanticweblog.install:77
+msgid "Primary Key: ID."
+msgstr ""
+
+#: semanticweblog.install:84
+msgid "The user id of the user who created this association."
+msgstr ""
+
+#: semanticweblog.install:91
+msgid "The term id of the first term."
+msgstr ""
+
+#: semanticweblog.install:98
+msgid "The atid of the association zype."
+msgstr ""
+
+#: semanticweblog.install:105
+msgid "The term of the second term."
+msgstr ""
+
+#: semanticweblog.install:112
+msgid "The timestamp of the moment of creation of this association"
+msgstr ""
+
+#: semanticweblog.info:0
+msgid "A more or less small Module to create simple Ontologies, Topic Maps with Drupal while blogging"
+msgstr ""
+
