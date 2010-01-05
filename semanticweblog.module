@@ -11,6 +11,8 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
+* @todo Add .po file for German.
+* @todo Make sure all Strings from the module are using t().
 * @todo Make the Output on the taxonomy/term pages configurable via Admins settings.
 * @todo Add advanced search to the association admin
 * @todo Add functions and pages for massediting of associations
