@@ -36,6 +36,7 @@
 /**
 * History
 *
+* 2010 01 05 [fym]: Added blank de.po for translation
 * 2010 01 03 [ben]: Added some Documentation and some refactoring
 * 2010 01 03 [ben]: Added first Output of Associations on the taxonomy/term pages.
 * 2010 01 03 [ben]: Minor Refactoring in the semanticweblog.association.inc
@@ -512,7 +513,7 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
         $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>";       
         }
     }else{
-      $output .= t('This Term has no Associations yet.');
+    	$output .= t('This Term has no Associations yet.');
     }   
     $output .= '</div>';
     
