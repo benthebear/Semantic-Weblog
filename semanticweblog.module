@@ -36,6 +36,7 @@
 /**
 * History
 *
+* 2010 01 06 [ben]: Added a basic option for Display of Associations on the topic page.
 * 2010 01 05 [fym]: Added blank de.po for translation
 * 2010 01 03 [ben]: Added some Documentation and some refactoring
 * 2010 01 03 [ben]: Added first Output of Associations on the taxonomy/term pages.
@@ -287,6 +288,17 @@ function semanticweblog_admin_settings() {
     '#size' => 30,
     '#description' => t('The Separator for you natural language bulk upload of Associations'),
   );
+  $display_options = array(
+    'not' => 'No Associations at all',
+    'plain' => 'A Plain List of all Associated Terms',    
+    );
+  $form['semanticweblog']['semanticweblog_admin_associations_display'] = array('#type' => 'select',
+    '#title' => t('Type of Display'),
+    '#default_value' => variable_get('semanticweblog_admin_associations_display', "plain"),
+    '#size' => 1,
+    '#description' => t('Type of Display of the associations on the Term pages'),
+    '#options' => $display_options,
+  );
   return system_settings_form($form);
 }
 
@@ -504,18 +516,21 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     $output .= filter_xss_admin($term->description);
     $output .= '</div>';
     
-    // Add Associations
-    $output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
-    $output .= '<div class="taxonomy-term-associations">';   
-    $associations = semanticweblog_api_term_get_all_associations($term->tid);    
-    if(count($associations)>0){
-      foreach ($associations as $assoc) {
-        $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>";       
-        }
-    }else{
-    	$output .= t('This Term has no Associations yet.');
-    }   
-    $output .= '</div>';
+    // Add Associations depending on the Settings.
+    // To Add more options here, do this: 
+    // 1. Add an Option in the semanticweblog_admin_settings() to the $display_options
+    // 2. Add a funciton semanticweblog_theme_term_page_associations_yourdisplaytype($term)
+    // 3. Add a case in this switch here.
+    $associations = semanticweblog_api_term_get_all_associations($term->tid);  
+    switch(variable_get('semanticweblog_admin_associations_display', "plain")){
+      case "plain":
+        $output .= semanticweblog_theme_term_page_associations_plainlist($term, $associations);
+        break;
+       
+      case "not":
+        break;
+    }
+    
     
     // A Title for the Nodes
     $output .= '<h2 class="taxonomy-term-content-title">' . t('Content on the Topic') . '</h2>';
@@ -525,6 +540,22 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
 
   return $output;
 }
+
+function semanticweblog_theme_term_page_associations_plainlist($term, $associations){
+  $output  = "";
+  $output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
+  $output .= '<div class="taxonomy-term-associations">';      
+  if(count($associations)>0){
+    foreach ($associations as $assoc) {
+      $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>";       
+      }
+  }else{
+  	$output .= t('This Term has no Associations yet.');
+  }   
+  $output .= '</div>';
+  return $output;
+}
+
 
 function _semanticweblog_taxonomy_term_page($tids) {
   $output = "";
