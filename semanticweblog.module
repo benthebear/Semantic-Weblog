@@ -19,7 +19,6 @@
 * @todo Add functions for adding association from within the register
 * @todo Add Associations to Term-Pages
 * @todo Add API to request association information inside Themes and other Modules
-* @todo Add warning, when no Association Type exists
 * @todo Add warning, when no Lexicon Vocabulary has been choosen
 * @todo Add helptext
 * @todo Improve Term Description use.
@@ -36,6 +35,9 @@
 /**
 * History
 *
+* 2010 01 09 [fym]: Added warning on Association page, when no Association Type exists
+* 2010 01 09 [fym]: Added options for Display of Associations on the topic page (ordered and unordered lists)
+* 2010 01 07 [fym]: Added option for Display of Associations on the topic page - before or after the listed nodes
 * 2010 01 06 [ben]: Added a basic option for Display of Associations on the topic page.
 * 2010 01 05 [fym]: Added blank de.po for translation
 * 2010 01 03 [ben]: Added some Documentation and some refactoring
@@ -288,9 +290,23 @@ function semanticweblog_admin_settings() {
     '#size' => 30,
     '#description' => t('The Separator for you natural language bulk upload of Associations'),
   );
+  $position_options = array(
+  	'before' => 'Before nodes',
+  	'after' => 'After nodes',
+  	);
+  $form['semanticweblog']['semanticweblog_admin_associations_position'] = array('#type' => 'select',
+    '#title' => t('Position of Associations'),
+    '#default_value' => variable_get('semanticweblog_admin_associations_position', "before"),
+    '#size' => 1,
+    '#description' => t('Position of Associations relative to listed nodes'),
+    '#options' => $position_options,
+  );
+  
   $display_options = array(
     'not' => 'No Associations at all',
-    'plain' => 'A Plain List of all Associated Terms',    
+    'plain' => 'A Plain List of all Associated Terms', 
+    'unorderedlist' => 'Unordered list (ul) of all Associated Terms',
+    'orderedlist' => 'Ordered list (ol) of all Associated Terms',
     );
   $form['semanticweblog']['semanticweblog_admin_associations_display'] = array('#type' => 'select',
     '#title' => t('Type of Display'),
@@ -299,6 +315,7 @@ function semanticweblog_admin_settings() {
     '#description' => t('Type of Display of the associations on the Term pages'),
     '#options' => $display_options,
   );
+  
   return system_settings_form($form);
 }
 
@@ -503,7 +520,7 @@ function semanticweblog_theme() {
 */
 function semanticweblog_taxonomy_term_page($tids, $result) {
   drupal_add_css(drupal_get_path('module', 'semanticweblog') . '/semanticweblog.css');
-  $output = '';
+  $association_output = '';
 
   // Only display the description if we have a single term, to avoid clutter and confusion.
   if (count($tids) == 1) {
@@ -512,9 +529,9 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     drupal_set_html_head('  <meta name="keywords" content="' . $term->name  .'" />');
     
     // Add Description
-    $output .= '<div class="taxonomy-term-description">';
-    $output .= filter_xss_admin($term->description);
-    $output .= '</div>';
+    $association_output .= '<div class="taxonomy-term-description">';
+    $association_output .= filter_xss_admin($term->description);
+    $association_output .= '</div>';
     
     // Add Associations depending on the Settings.
     // To Add more options here, do this: 
@@ -524,38 +541,76 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     $associations = semanticweblog_api_term_get_all_associations($term->tid);  
     switch(variable_get('semanticweblog_admin_associations_display', "plain")){
       case "plain":
-        $output .= semanticweblog_theme_term_page_associations_plainlist($term, $associations);
+        $association_output .= semanticweblog_theme_term_page_associations_plainlist($term, $associations);
         break;
-       
+      case "unorderedlist":
+      	$association_output .= semanticweblog_theme_term_page_associations_lists($term, $associations, 'unordered');
+      	break;
+      case "orderedlist":
+      	$association_output .= semanticweblog_theme_term_page_associations_lists($term, $associations, 'ordered');
+      	break;
       case "not":
         break;
     }
     
     
     // A Title for the Nodes
-    $output .= '<h2 class="taxonomy-term-content-title">' . t('Content on the Topic') . '</h2>';
+    $nodetitle = '<h2 class="taxonomy-term-content-title">' . t('Content on the Topic') . '</h2>';
   }
 
-  $output .= taxonomy_render_nodes($result);
-
+	switch(variable_get('semanticweblog_admin_associations_position', "before")){
+      case "before":
+        $output = $association_output . $nodetitle . taxonomy_render_nodes($result);
+        break;
+      case "after":
+      	$output .= $nodetitle . taxonomy_render_nodes($result) . $association_output;
+        break;
+    }
   return $output;
 }
 
 function semanticweblog_theme_term_page_associations_plainlist($term, $associations){
-  $output  = "";
+  $output  = "<div id=\"term-page-associations\">\n";
   $output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
-  $output .= '<div class="taxonomy-term-associations">';      
+  $output .= '<div class="taxonomy-term-associations associations-plainlist">';      
   if(count($associations)>0){
-    foreach ($associations as $assoc) {
-      $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>";       
-      }
+  	foreach ($associations as $assoc) {
+      $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>\n";       
+    }
   }else{
   	$output .= t('This Term has no Associations yet.');
   }   
-  $output .= '</div>';
+  $output .= "</div>\n";
+  $output .= "</div>\n";
   return $output;
 }
 
+
+function semanticweblog_theme_term_page_associations_lists($term, $associations, $mode){
+	switch($mode) {
+		case "unordered":
+		$listtype = "ul";
+			break;
+		case "ordered":
+		$listtype = "ol";
+			break; 
+	}
+  $output  = "<div id=\"term-page-associations\">\n";
+  $output .= "<h2 class=\"taxonomy-term-assciation-title\">" . t('Associations of this Term') . "</h2>\n";
+  $output .= "<div class=\"taxonomy-term-associations associations-".$mode."list\">\n";      
+  if(count($associations)>0){
+  	$output .= "<".$listtype.">\n";
+  	foreach ($associations as $assoc) {
+      $output .= "<li>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</li>\n";       
+    }
+    $output .= "</".$listtype.">\n";
+  }else{
+  	$output .= t('This Term has no Associations yet.');
+  }   
+  $output .= "</div>\n";
+  $output .= "</div>\n";
+  return $output;
+}
 
 function _semanticweblog_taxonomy_term_page($tids) {
   $output = "";
