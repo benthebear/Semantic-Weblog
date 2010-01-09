@@ -11,6 +11,8 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
+* @todo Add Versions
+* @todo Add function semanticweblog_nodes_linking_to_me
 * @todo Add .po file for German.
 * @todo Make sure all Strings from the module are using t().
 * @todo Make the Output on the taxonomy/term pages configurable via Admins settings.
@@ -35,6 +37,7 @@
 /**
 * History
 *
+* 2010 01 09 [ben]: Removed _semanticweblog_taxonomy_term_page()
 * 2010 01 09 [fym]: Added warning on Association page, when no Association Type exists
 * 2010 01 09 [fym]: Added options for Display of Associations on the topic page (ordered and unordered lists)
 * 2010 01 07 [fym]: Added option for Display of Associations on the topic page - before or after the listed nodes
