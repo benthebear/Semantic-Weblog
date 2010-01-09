@@ -82,10 +82,15 @@ function semanticweblog_basic_add_association() {
   );
 
   $types = semanticweblog_get_all_types();
-  foreach ($types as $type) {
-    $options[$type["atid"]] = $type["name"];
-  }
-
+	if (count($types) > 0) {
+  	foreach ($types as $type) {
+    	$options[$type["atid"]] = $type["name"];
+  	}
+	} else { 
+			$options[0] = "None";
+			drupal_set_message(l(t('You have to add at least one association type first.'), "admin/content/associationtype"));
+		}
+		
   $form["semanticweblog_basic_add_association"]['atid-basic'] = array(
     '#type' => 'select',
     '#title' => t('Association Type'),
@@ -109,6 +114,7 @@ function semanticweblog_basic_add_association() {
     '#type' => 'submit',
     '#value' => t('Create new Association'),
   );
+   
   return $form;
 }
 
