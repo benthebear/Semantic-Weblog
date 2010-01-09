@@ -612,19 +612,12 @@ function semanticweblog_theme_term_page_associations_lists($term, $associations,
   return $output;
 }
 
-function _semanticweblog_taxonomy_term_page($tids) {
-  $output = "";
-  if (count($tids) == 1) {
-    $term = taxonomy_get_term($tids[0]);
-    if (user_access('administer taxonomy')) {
-      $output .= "<p>" . l(t("Edit term") . " '" . $term->name . "'", "admin/content/taxonomy/edit/term/" . $tids[0]) . "</p>";
-    }
-  }
-  return $output;
-}
 
 
 
+/**
+* This functions searches for Links between Nodes
+*/
 function semanticweblog_nodes_linking_to_me($node) {
 
 }
