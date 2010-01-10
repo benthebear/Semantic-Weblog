@@ -65,6 +65,7 @@ function semanticweblog_block_add_association_bulk() {
  * @return array $form A Drupal Form Array
  */
 function semanticweblog_basic_add_association() {
+	semanticweblog_vocab_is_set();
   $form = array();
   $form["semanticweblog_basic_add_association"] = array(
     '#type' => 'fieldset',
@@ -82,14 +83,9 @@ function semanticweblog_basic_add_association() {
   );
 
   $types = semanticweblog_get_all_types();
-	if (count($types) > 0) {
-  	foreach ($types as $type) {
-    	$options[$type["atid"]] = $type["name"];
-  	}
-	} else { 
-			$options[0] = "None";
-			drupal_set_message(l(t('You have to add at least one association type first.'), "admin/content/associationtype"));
-		}
+	foreach ($types as $type) {
+    $options[$type["atid"]] = $type["name"];
+  }
 		
   $form["semanticweblog_basic_add_association"]['atid-basic'] = array(
     '#type' => 'select',
@@ -161,6 +157,7 @@ function semanticweblog_basic_add_association_submit ($form, &$form_state) {
  */
 function semanticweblog_ajax_add_association() {
   global $base_url;
+  semanticweblog_vocab_is_set();
   
   $form = array();
   $form["semanticweblog_ajax_add_association"] = array(
@@ -215,6 +212,7 @@ function semanticweblog_ajax_add_association() {
  * @return array $form A Drupal Form Array
  */
 function semanticweblog_bulk_add_association() {
+	semanticweblog_vocab_is_set();
   $form = array();
   $form["semanticweblog_bulk_add_association"] = array(
     '#type' => 'fieldset',
@@ -328,6 +326,17 @@ function semanticweblog_exists_association ($member1, $assoctype, $member2) {
   }else{
     return false;
   } 
+}
+
+/**
+ * Checks wether an vocabulary was set for use in the forms
+ */
+function semanticweblog_vocab_is_set() {
+	$vid = variable_get('semanticweblog_lexicon', "");
+	if ($vid != "") {
+	} else {
+		drupal_set_message(l(t('You have to set a vocabulary to be your lexicon first.'), 'admin/settings/semanticweblog'), 'warning', FALSE);
+	}
 }
 
 

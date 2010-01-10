@@ -21,7 +21,6 @@
 * @todo Add functions for adding association from within the register
 * @todo Add Associations to Term-Pages
 * @todo Add API to request association information inside Themes and other Modules
-* @todo Add warning, when no Lexicon Vocabulary has been choosen
 * @todo Add helptext
 * @todo Improve Term Description use.
 * @todo Add local Task 'url aliases' for Terms.
@@ -36,7 +35,8 @@
 
 /**
 * History
-*
+* 2010 01 10 [fym]: added semanticweblog_vocab_is_set() to warn if no vocabulary is set for use in forms
+* 2010 01 10 [fym]: refactored warnings on admin associations pages
 * 2010 01 10 [ben]: Bugfix. Removed absolute path form the JS. 
 * 2010 01 09 [ben]: Removed _semanticweblog_taxonomy_term_page()
 * 2010 01 09 [fym]: Added warning on Association page, when no Association Type exists
