@@ -37,6 +37,7 @@
 /**
 * History
 *
+* 2010 01 10 [ben]: Bugfix. Removed absolute path form the JS. 
 * 2010 01 09 [ben]: Removed _semanticweblog_taxonomy_term_page()
 * 2010 01 09 [fym]: Added warning on Association page, when no Association Type exists
 * 2010 01 09 [fym]: Added options for Display of Associations on the topic page (ordered and unordered lists)
