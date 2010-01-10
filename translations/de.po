@@ -422,3 +422,4 @@ msgstr ""
 #: semanticweblog.info:0
 msgid "A more or less small Module to create simple Ontologies, Topic Maps with Drupal while blogging"
 msgstr ""
+ 
