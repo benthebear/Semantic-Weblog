@@ -14,9 +14,14 @@
 
 function semanticweblog_load_all_types() {  
   $result = db_query("SELECT * FROM {semanticweblog_types}");
-  $items = array();
-  while ($item = db_fetch_array($result)) {
-    $items[$item['atid']] = $item;
+ 	while ($item = db_fetch_array($result)) {
+ 		if ($item != "") {
+ 			$items[$item['atid']] = $item;
+ 		}
+  }
+  if ($items == "") { 
+  	drupal_set_message(l(t('No association types set, add at least one.'), "admin/content/associationtype"), 'warning', FALSE);
+  	$items[0] = array('atid' => '0', 'name' => t('No Association Types defined'));
   }
   return $items;
 }

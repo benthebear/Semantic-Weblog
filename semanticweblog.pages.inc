@@ -136,11 +136,14 @@ function theme_semanticweblog_register_alphabet($vid, $letter = "A") {
 function semanticweblog_administer_associationtypes() {
   $output = "";
   $types = semanticweblog_get_all_types();
-  foreach ($types as $type) {
-    $rows[] = array($type["atid"], $type["name"], $type["role1"], $type["role2"], $type["sentence"], l("edit", "admin/content/associationtype/" . $type["atid"] . "/edit") . " | " . l("delete", "admin/content/associationtype/" . $type["atid"] . "/delete") );
+  if ($types[0]["name"] != t('No Association Types defined')) {
+  	foreach ($types as $type) {
+    	$rows[] = array($type["atid"], $type["name"], $type["role1"], $type["role2"], $type["sentence"], l("edit", "admin/content/associationtype/" . $type["atid"] . "/edit") . " | " . l("delete", "admin/content/associationtype/" . $type["atid"] . "/delete") );
+  	}
+  	$output .=  theme_table(array("No.", "Name", "First Role", "Second Role", "Sentence", "Actions"), $rows);
   }
-  $output .=  theme_table(array("No.", "Name", "First Role", "Second Role", "Sentence", "Actions"), $rows);
   $output .= drupal_get_form("semanticweblog_manage_association_types");
+
   return $output;
 }
 
