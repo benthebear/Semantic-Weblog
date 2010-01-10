@@ -160,6 +160,8 @@ function semanticweblog_basic_add_association_submit ($form, &$form_state) {
  * @return array $form A Drupal Form Array
  */
 function semanticweblog_ajax_add_association() {
+  global $base_url;
+  
   $form = array();
   $form["semanticweblog_ajax_add_association"] = array(
     '#type' => 'fieldset',
@@ -200,7 +202,7 @@ function semanticweblog_ajax_add_association() {
     //'#description' => t('Enter a name for the second Member of your Association'),
   );
   
-  $form["semanticweblog_ajax_add_association"]["role2-ajax"]["#suffix"] = "<div id='result'/><input type='button' onclick='semanticweblog_send_assoc();' value='Creat Assoc on the fly'>";
+  $form["semanticweblog_ajax_add_association"]["role2-ajax"]["#suffix"] = "<div id='result'/><input type='button' onclick='semanticweblog_send_assoc(\"".$base_url."\");' value='Creat Assoc on the fly'>";
   return $form;
 }
 

@@ -3,19 +3,20 @@
 // @copyright creative commons by-sa 
 
 
-function semanticweblog_send_assoc(){
+function semanticweblog_send_assoc(baseurl){
   // Create all necessary Variables
   var term1 = '';
   var atid = '';
   var term2 = '';
   var target = 'result';
-  var url = 'http://anmutunddemut.de/association/add';
+  var url = '/association/add';
   var method = 'GET';
   var append = true;
   term1 = document.getElementById('edit-role1-ajax').value;
   atid = document.getElementById('edit-atid-ajax').value;
   term2 = document.getElementById('edit-role2-ajax').value;
   url += '/' + term1 + '/' + atid + '/' + term2;
+  url = baseurl + url;
   //alert (url);
   
   if (document.getElementById) { // Only "document.getElementById" Browsers are allowed beyond here
