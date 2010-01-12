@@ -584,7 +584,6 @@ function semanticweblog_theme_term_page_associations_plainlist($term, $associati
     }
   }else{
   	$output .= t('This Term has no Associations yet.');
-  	$output .= drupal_get_form("semanticweblog_ajax_add_association");
   }   
   $output .= "</div>\n";
   $output .= "</div>\n";
@@ -612,7 +611,6 @@ function semanticweblog_theme_term_page_associations_lists($term, $associations,
     $output .= "</".$listtype.">\n";
   }else{
   	$output .= t('This Term has no Associations yet.');
-  	$output .= drupal_get_form("semanticweblog_ajax_add_association");
   }   
   $output .= "</div>\n";
   $output .= "</div>\n";
