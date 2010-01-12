@@ -24,6 +24,12 @@ function semanticweblog_install() {
 function semanticweblog_uninstall() {
   // Remove tables.
   drupal_uninstall_schema('semanticweblog');
+  // Remove settings
+  variable_del('semanticweblog_admin_associations_display');
+  variable_del('semanticweblog_admin_associations_pager');
+  variable_del('semanticweblog_admin_associations_position');
+  variable_del('semanticweblog_bulk_separator');
+  variable_del('semanticweblog_lexicon');
 }
 
 /**
