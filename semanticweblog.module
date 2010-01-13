@@ -35,6 +35,7 @@
 
 /**
 * History
+* 2010 01 12 [fym]: added deletion of options on deinstallation
 * 2010 01 10 [fym]: added semanticweblog_vocab_is_set() to warn if no vocabulary is set for use in forms
 * 2010 01 10 [fym]: refactored warnings on admin associations pages
 * 2010 01 10 [ben]: Bugfix. Removed absolute path form the JS. 
