@@ -11,25 +11,28 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
-* @todo Refactor recurrent Form-Fields for Terms and Associationtypes.
-* @todo Add Versions
-* @todo Add function semanticweblog_nodes_linking_to_me
-* @todo Add .po file for German.
-* @todo Make sure all Strings from the module are using t().
-* @todo Make the Output on the taxonomy/term pages configurable via Admins settings.
-* @todo Add functions and pages for massediting of associations
-* @todo Add functions for adding association from within the register
-* @todo Add Associations to Term-Pages
-* @todo Add API to request association information inside Themes and other Modules
-* @todo Add helptext
-* @todo Improve Term Description use.
-* @todo Add local Task 'url aliases' for Terms.
-* @todo More Admin Settings.
-* @todo Nodes linking to me.
-* @todo Do more Documentation.
-* @todo Add Filter and Template Tag for including Topic information into Text-Body. 
+* 
+* @todo [prio 1] Add Versions
+* @todo [prio 1] Keep .po file for German translation up to date.
+* @todo [prio 1] Make sure all Strings from the module are using t().
+* @todo [prio 1] Add helptext
+* @todo [prio 1] Do more Documentation.
+* @todo [prio 1] Remove all non-hook, non-theme functions from the file.
+
+* @todo [prio 2] Add function semanticweblog_nodes_linking_to_me
+* @todo [prio 2] Enhance the Output on the taxonomy/term pages configurable via Admins settings.
+* @todo [prio 2] extend API functionality to request association information inside Themes and other Modules
+* @todo [prio 2] Improve Term Description use.
+* @todo [prio 2] Add local Task 'url aliases' for Terms.
+* @todo [prio 2] More Admin Settings.
+
+
+* @todo [prio 3] Add functions and pages for massediting of associations
+* @todo [prio 3] Add functions for adding association from within the register
+* @todo [prio 3] Add functions for adding association from within the term/taxonomy pages, when none exist
+* @todo [prio 3] Add Filter and Template Tag for including Topic information into Text-Body. 
 *       See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
-* @todo Remove all non-hook, non-theme functions from the file.
+* @todo [prio 3] Refactor recurrent Form-Fields for Terms and Associationtypes.
 *
 */
 
