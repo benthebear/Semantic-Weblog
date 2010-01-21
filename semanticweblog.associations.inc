@@ -309,6 +309,12 @@ function semanticweblog_bulk_add_association_submit ($form, &$form_state) {
 
 function semanticweblog_form_association_admin_filter_basic(){
   semanticweblog_vocab_is_set();
+  if(arg(3)!=""){
+    $term = semanticweblog_load_all_terms(array(arg(3)));
+    $term = $term[arg(3)];
+  }else{
+    $term = "";
+  }
   $form = array();
   $form["semanticweblog_form_association_admin_filter_advanced"] = array(
     '#type' => 'fieldset',
@@ -317,8 +323,8 @@ function semanticweblog_form_association_admin_filter_basic(){
     );
   $form["semanticweblog_form_association_admin_filter_advanced"]["term"] = array(
     '#type' => 'textfield',
-    '#title' => t('First Member'),
-    '#default_value' => '',
+    '#title' => t('Term'),
+    '#default_value' => $term,
     '#size' => 30,
     '#maxlength' => 512,
     '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
