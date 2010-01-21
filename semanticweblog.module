@@ -11,6 +11,7 @@
 * @package semanticweblog
 * @copyright creative commons by-sa
 *
+* @todo Refactor recurrent Form-Fields for Terms and Associationtypes.
 * @todo Add Versions
 * @todo Add function semanticweblog_nodes_linking_to_me
 * @todo Add .po file for German.

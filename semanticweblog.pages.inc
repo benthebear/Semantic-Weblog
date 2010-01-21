@@ -188,12 +188,15 @@ function semanticweblog_administer_associations() {
   $output .= drupal_get_form("semanticweblog_basic_add_association");
 
   // Get the Associations 
-  if(variable_get('semanticweblog_admin_associations_pager', "10")!="All"){
-    $pager = TRUE;
+  if(arg(3)!=""){
+    $display = "filter";
+  }elseif(variable_get('semanticweblog_admin_associations_pager', "10")!="All"){
+    $display = "paged";
   }else{
-    $pager = FALSE;
-  }
-  $assocs = semanaticweblog_get_associations($pager);  
+    $display = "all";
+  }  
+  $output .= drupal_get_form("semanticweblog_form_association_admin_filter");
+  $assocs = semanaticweblog_get_associations($display);  
   foreach ($assocs as $assoc) {
     $rows[] = array(
       $assoc["member1"]["role"],
