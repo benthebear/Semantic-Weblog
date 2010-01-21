@@ -18,15 +18,15 @@
 * @todo [prio 1] Add helptext
 * @todo [prio 1] Do more Documentation.
 * @todo [prio 1] Remove all non-hook, non-theme functions from the file.
-
+*
 * @todo [prio 2] Add function semanticweblog_nodes_linking_to_me
 * @todo [prio 2] Enhance the Output on the taxonomy/term pages configurable via Admins settings.
 * @todo [prio 2] extend API functionality to request association information inside Themes and other Modules
 * @todo [prio 2] Improve Term Description use.
 * @todo [prio 2] Add local Task 'url aliases' for Terms.
 * @todo [prio 2] More Admin Settings.
-
-
+*
+*
 * @todo [prio 3] Add functions and pages for massediting of associations
 * @todo [prio 3] Add functions for adding association from within the register
 * @todo [prio 3] Add functions for adding association from within the term/taxonomy pages, when none exist
