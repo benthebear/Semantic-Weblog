@@ -17,7 +17,6 @@
 * @todo Add .po file for German.
 * @todo Make sure all Strings from the module are using t().
 * @todo Make the Output on the taxonomy/term pages configurable via Admins settings.
-* @todo Add advanced search to the association admin
 * @todo Add functions and pages for massediting of associations
 * @todo Add functions for adding association from within the register
 * @todo Add Associations to Term-Pages
@@ -36,6 +35,7 @@
 
 /**
 * History
+* 2010 01 21 [ben]: Added basic and advanced Filter for the Association Admin Page.
 * 2010 01 12 [fym]: added deletion of options on deinstallation
 * 2010 01 10 [fym]: added semanticweblog_vocab_is_set() to warn if no vocabulary is set for use in forms
 * 2010 01 10 [fym]: refactored warnings on admin associations pages
