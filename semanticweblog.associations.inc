@@ -307,16 +307,50 @@ function semanticweblog_bulk_add_association_submit ($form, &$form_state) {
   drupal_goto("admin/content/association");
 }
 
-
-function semanticweblog_form_association_admin_filter(){
+function semanticweblog_form_association_admin_filter_basic(){
   semanticweblog_vocab_is_set();
   $form = array();
-  $form["semanticweblog_form_association_admin_filter"] = array(
+  $form["semanticweblog_form_association_admin_filter_advanced"] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
     '#title' => t("Filter Associations"),
     );
-  $form["semanticweblog_form_association_admin_filter"]["role1-filter"] = array(
+  $form["semanticweblog_form_association_admin_filter_advanced"]["term"] = array(
+    '#type' => 'textfield',
+    '#title' => t('First Member'),
+    '#default_value' => '',
+    '#size' => 30,
+    '#maxlength' => 512,
+    '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
+    //'#description' => t('Enter a name for the first Member of your Association'),
+  );
+
+  $form["semanticweblog_form_association_admin_filter_advanced"]["submit"] = array(
+    '#type' => 'submit',
+    '#value' => t('Filter Associations'),
+  );
+   
+  return $form;
+  
+}
+
+function semanticweblog_form_association_admin_filter_basic_submit($form, &$form_state){
+    $term = semanticweblog_term2tid($form_state["values"]["term"]);   
+    if($term==""){$term="any";}
+    drupal_goto("admin/content/association/" . $term );
+}
+
+
+function semanticweblog_form_association_admin_filter_advanced(){
+  semanticweblog_vocab_is_set();
+  $form = array();
+  $form["semanticweblog_form_association_admin_filter_advanced"] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#title' => t("Advanced Associations Filter"),
+    );
+  $form["semanticweblog_form_association_admin_filter_advanced"]["role1-filter"] = array(
     '#type' => 'textfield',
     '#title' => t('First Member'),
     '#default_value' => '',
@@ -332,7 +366,7 @@ function semanticweblog_form_association_admin_filter(){
     $options[$type["atid"]] = $type["name"];
   }
 		
-  $form["semanticweblog_form_association_admin_filter"]['atid-filter'] = array(
+  $form["semanticweblog_form_association_admin_filter_advanced"]['atid-filter'] = array(
     '#type' => 'select',
     '#title' => t('Association Type'),
     '#default_value' => '',
@@ -341,7 +375,7 @@ function semanticweblog_form_association_admin_filter(){
     '#options' => $options,
   );
 
-  $form["semanticweblog_form_association_admin_filter"]["role2-filter"] = array(
+  $form["semanticweblog_form_association_admin_filter_advanced"]["role2-filter"] = array(
     '#type' => 'textfield',
     '#title' => t('Second Memeber'),
     '#default_value' => '',
@@ -351,7 +385,7 @@ function semanticweblog_form_association_admin_filter(){
     //'#description' => t('Enter a name for the second Member of your Association'),
   );
 
-  $form["semanticweblog_form_association_admin_filter"]["submit"] = array(
+  $form["semanticweblog_form_association_admin_filter_advanced"]["submit"] = array(
     '#type' => 'submit',
     '#value' => t('Filter Associations'),
   );
@@ -360,7 +394,7 @@ function semanticweblog_form_association_admin_filter(){
   
 }
 
-function semanticweblog_form_association_admin_filter_submit($form, &$form_state){
+function semanticweblog_form_association_admin_filter_advanced_submit($form, &$form_state){
     $tid1 = semanticweblog_term2tid($form_state["values"]["role1-filter"]);
     $tid2 = semanticweblog_term2tid($form_state["values"]["role2-filter"]);
     $atid = $form_state["values"]["atid-filter"];
@@ -453,7 +487,13 @@ function semanticweblog_load_filtered_associations(){
   // Create the where clause
   $first = true;
   $where = "";
-  if($term1 !="" or $type !="" or $term2 !=""){
+  if($term1 != "" and $type=="" and $term2==""){
+    $where = " WHERE ";
+    $where .= "member1tid = %d OR member2tid = %d";
+    $args[] = $term1;
+    $args[] = $term1;
+    $first = false;
+  }elseif($term1 !="" or $type !="" or $term2 !=""){
     $where = " WHERE ";
     if($term1 !="any"){
       $where .= "member1tid = %d";
