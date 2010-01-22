@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-01-22 12:54+0100\n"
-"PO-Revision-Date: 2010-01-22 12:54+0100\n"
+"POT-Creation-Date: 2010-01-22 15:05+0100\n"
+"PO-Revision-Date: 2010-01-22 15:05+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -27,16 +27,16 @@ msgstr ""
 msgid "Add an Association"
 msgstr ""
 
-#: semanticweblog.associations.inc:77;170;342
+#: semanticweblog.associations.inc:77;170;352
 msgid "First Member"
 msgstr ""
 
-#: semanticweblog.associations.inc:92;185;358
+#: semanticweblog.associations.inc:92;185;367
 msgid "Association Type"
 msgstr ""
 
-#: semanticweblog.associations.inc:101;194
-msgid "Second Memeber"
+#: semanticweblog.associations.inc:101;194;375
+msgid "Second Member"
 msgstr ""
 
 #: semanticweblog.associations.inc:111
@@ -111,43 +111,39 @@ msgstr ""
 msgid "No association has been created."
 msgstr ""
 
-#: semanticweblog.associations.inc:323;375
+#: semanticweblog.associations.inc:333;384
 msgid "Filter Associations"
 msgstr ""
 
-#: semanticweblog.associations.inc:327
+#: semanticweblog.associations.inc:337
 msgid "Term"
 msgstr "Begriff"
 
-#: semanticweblog.associations.inc:332
+#: semanticweblog.associations.inc:342
 msgid "Enter a term to search for all its associations"
 msgstr ""
 
-#: semanticweblog.associations.inc:338
-msgid "Advanced Filter"
+#: semanticweblog.associations.inc:348
+msgid "advanced"
 msgstr ""
 
-#: semanticweblog.associations.inc:351
+#: semanticweblog.associations.inc:361
 msgid "Any Associationtype"
 msgstr ""
 
-#: semanticweblog.associations.inc:366
-msgid "Second Member"
-msgstr ""
-
-#: semanticweblog.associations.inc:381
+#: semanticweblog.associations.inc:390
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: semanticweblog.associations.inc:433
+#: semanticweblog.associations.inc:443
 msgid "You have to set a vocabulary to be your lexicon first."
 msgstr ""
 
-#: semanticweblog.associations.inc:700
+#: semanticweblog.associations.inc:710
 msgid "Delete this Association"
 msgstr ""
 
-#: semanticweblog.associations.inc:711
+#: semanticweblog.associations.inc:721
 msgid "Your association has been deleted."
 msgstr ""
 
