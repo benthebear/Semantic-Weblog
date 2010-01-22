@@ -309,10 +309,20 @@ function semanticweblog_bulk_add_association_submit ($form, &$form_state) {
 
 function semanticweblog_form_association_admin_filter(){ 
 	semanticweblog_vocab_is_set();
-  if(arg(3)!=""){
+	$advanced_collapsed = TRUE;
+  if(arg(3)!="" && arg(4) == ""){
     $term = semanticweblog_load_all_terms(array(arg(3)));
     $term = $term[arg(3)];
-  }else{
+  }
+  if (arg(3)!="" && arg(4) != "" && arg(5) != ""){
+  	$advanced_collapsed = FALSE;
+  	$term_advanced = semanticweblog_load_all_terms(array(arg(3)));
+  	$terms_advanced["firstmember"] = $term_advanced[arg(3)];
+  	$atid_advanced = arg(4);
+  	$term_advanced = semanticweblog_load_all_terms(array(arg(5)));
+  	$terms_advanced["secondmember"] = $term_advanced[arg(5)];
+  }
+  if(arg(3)==""){
     $term = "";
   }
   
@@ -334,13 +344,13 @@ function semanticweblog_form_association_admin_filter(){
   $form["semanticweblog_form_association_admin_filter"]["advanced"] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#title' => t("Advanced Filter"),
+    '#collapsed' => $advanced_collapsed,
+    '#title' => t("advanced"),
     );
 	$form["semanticweblog_form_association_admin_filter"]["advanced"]["role1-filter"] = array(
     '#type' => 'textfield',
     '#title' => t('First Member'),
-    '#default_value' => '',
+    '#default_value' => $terms_advanced["firstmember"],
     '#size' => 30,
     '#maxlength' => 512,
     '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
@@ -350,13 +360,12 @@ function semanticweblog_form_association_admin_filter(){
   $types = semanticweblog_get_all_types();
   $options["0"] = t("Any Associationtype");
 	foreach ($types as $type) {	  
-    $options[$type["atid"]] = $type["name"];
+		$options[$type["atid"]] = $type["name"];
   }
-		
-  $form["semanticweblog_form_association_admin_filter"]["advanced"]['atid-filter'] = array(
+	$form["semanticweblog_form_association_admin_filter"]["advanced"]['atid-filter'] = array(
     '#type' => 'select',
     '#title' => t('Association Type'),
-    '#default_value' => '',
+    '#default_value' => $atid_advanced,
     '#size' => 1,
     //'#description' => t('How are your Topics related?'),
     '#options' => $options,
@@ -364,7 +373,7 @@ function semanticweblog_form_association_admin_filter(){
 	$form["semanticweblog_form_association_admin_filter"]["advanced"]["role2-filter"] = array(
     '#type' => 'textfield',
     '#title' => t('Second Member'),
-    '#default_value' => '',
+    '#default_value' => $terms_advanced["secondmember"],
     '#size' => 30,
     '#maxlength' => 512,
     '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
@@ -375,7 +384,7 @@ function semanticweblog_form_association_admin_filter(){
     '#value' => t('Filter Associations'),
   );
 	
-	if ($term != "") {
+	if ($term or $terms_advanced) {
 	$form["semanticweblog_form_association_admin_filter"]['reset'] = array(
       '#type' => 'submit',
       '#value' => t('Reset'),
@@ -390,15 +399,16 @@ function semanticweblog_form_association_admin_filter_submit($form, &$form_state
 		$term = semanticweblog_term2tid($form_state["values"]["term"]);   
     drupal_goto("admin/content/association/" . $term );
     return;
-  }
-  if ($form_state["values"]["role1-filter"] != "" and $form_state["values"]["role1-filter"] != ""){
-  	$tid1 = semanticweblog_term2tid($form_state["values"]["role1-filter"]);
-    $tid2 = semanticweblog_term2tid($form_state["values"]["role2-filter"]);
-    $atid = $form_state["values"]["atid-filter"];
-    drupal_goto("admin/content/association/" . $tid1 . "/" . $atid . "/" . $tid2);
-  }else{
-  	drupal_goto("admin/content/association/"); 
-  }
+  } else{
+   		$tid1 = semanticweblog_term2tid($form_state["values"]["role1-filter"]);
+   		$tid2 = semanticweblog_term2tid($form_state["values"]["role2-filter"]);
+    	if ($tid1 == "") { $tid1 = "0"; }
+    	if ($tid2 == "") { $tid2 = "0"; }
+    	$atid = $form_state["values"]["atid-filter"];
+  		drupal_goto("admin/content/association/" . $tid1 . "/" . $atid . "/" . $tid2);
+  	}
+  
+  
 }
 
 function semanticweblog_form_association_admin_filter_reset($form, &$form_state){
@@ -497,7 +507,7 @@ function semanticweblog_load_filtered_associations(){
     $first = false;
   }elseif($term1 !="" or $type !="" or $term2 !=""){
     $where = " WHERE ";
-    if($term1 !=""){
+    if($term1 !="0"){
       $where .= "member1tid = %d";
       $first = false;
       $args[] = $term1;
@@ -510,7 +520,7 @@ function semanticweblog_load_filtered_associations(){
       $first = false;
       $args[] = $type;
     }
-    if($term2 !=""){
+    if($term2 !="0"){
        if (!$first){
          $where .= " AND ";     
        }
