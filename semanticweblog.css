@@ -7,8 +7,15 @@
 #edit-role1-basic-wrapper,
 #edit-role1-ajax-wrapper{
  position:absolute;	
-	
 }
+
+#edit-role1-filter-wrapper,
+#edit-atid-filter-wrapper {
+	float:left; margin-right:2em; 
+}
+
+#edit-role2-filter-wrapper {
+position:absolute; left:500px; }
 
 #edit-atid-basic-wrapper,
 #edit-atid-ajax-wrapper {

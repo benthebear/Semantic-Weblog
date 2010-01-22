@@ -307,56 +307,37 @@ function semanticweblog_bulk_add_association_submit ($form, &$form_state) {
   drupal_goto("admin/content/association");
 }
 
-function semanticweblog_form_association_admin_filter_basic(){
-  semanticweblog_vocab_is_set();
+function semanticweblog_form_association_admin_filter(){ 
+	semanticweblog_vocab_is_set();
   if(arg(3)!=""){
     $term = semanticweblog_load_all_terms(array(arg(3)));
     $term = $term[arg(3)];
   }else{
     $term = "";
   }
-  $form = array();
-  $form["semanticweblog_form_association_admin_filter_advanced"] = array(
+  
+	$form = array();
+  $form["semanticweblog_form_association_admin_filter"] = array(
     '#type' => 'fieldset',
-    '#collapsible' => TRUE,
+    '#collapsible' => FALSE,
     '#title' => t("Filter Associations"),
     );
-  $form["semanticweblog_form_association_admin_filter_advanced"]["term"] = array(
+  $form["semanticweblog_form_association_admin_filter"]["term"] = array(
     '#type' => 'textfield',
     '#title' => t('Term'),
     '#default_value' => $term,
     '#size' => 30,
     '#maxlength' => 512,
     '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
-    //'#description' => t('Enter a name for the first Member of your Association'),
+    '#description' => t('Enter a term to search for all its associations'),
   );
-
-  $form["semanticweblog_form_association_admin_filter_advanced"]["submit"] = array(
-    '#type' => 'submit',
-    '#value' => t('Filter Associations'),
-  );
-   
-  return $form;
-  
-}
-
-function semanticweblog_form_association_admin_filter_basic_submit($form, &$form_state){
-    $term = semanticweblog_term2tid($form_state["values"]["term"]);   
-    if($term==""){$term="any";}
-    drupal_goto("admin/content/association/" . $term );
-}
-
-
-function semanticweblog_form_association_admin_filter_advanced(){
-  semanticweblog_vocab_is_set();
-  $form = array();
-  $form["semanticweblog_form_association_admin_filter_advanced"] = array(
+  $form["semanticweblog_form_association_admin_filter"]["advanced"] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#title' => t("Advanced Associations Filter"),
+    '#title' => t("Advanced Filter"),
     );
-  $form["semanticweblog_form_association_admin_filter_advanced"]["role1-filter"] = array(
+	$form["semanticweblog_form_association_admin_filter"]["advanced"]["role1-filter"] = array(
     '#type' => 'textfield',
     '#title' => t('First Member'),
     '#default_value' => '',
@@ -367,12 +348,12 @@ function semanticweblog_form_association_admin_filter_advanced(){
   );
 
   $types = semanticweblog_get_all_types();
-  $options["any"] = t("Any Associationtype");
+  $options["0"] = t("Any Associationtype");
 	foreach ($types as $type) {	  
     $options[$type["atid"]] = $type["name"];
   }
 		
-  $form["semanticweblog_form_association_admin_filter_advanced"]['atid-filter'] = array(
+  $form["semanticweblog_form_association_admin_filter"]["advanced"]['atid-filter'] = array(
     '#type' => 'select',
     '#title' => t('Association Type'),
     '#default_value' => '',
@@ -380,35 +361,50 @@ function semanticweblog_form_association_admin_filter_advanced(){
     //'#description' => t('How are your Topics related?'),
     '#options' => $options,
   );
-
-  $form["semanticweblog_form_association_admin_filter_advanced"]["role2-filter"] = array(
+	$form["semanticweblog_form_association_admin_filter"]["advanced"]["role2-filter"] = array(
     '#type' => 'textfield',
-    '#title' => t('Second Memeber'),
+    '#title' => t('Second Member'),
     '#default_value' => '',
     '#size' => 30,
     '#maxlength' => 512,
     '#autocomplete_path' => 'taxonomy/autocomplete/' . variable_get('semanticweblog_lexicon', ""),
     //'#description' => t('Enter a name for the second Member of your Association'),
   );
-
-  $form["semanticweblog_form_association_admin_filter_advanced"]["submit"] = array(
+	$form["semanticweblog_form_association_admin_filter"]["submit"] = array(
     '#type' => 'submit',
     '#value' => t('Filter Associations'),
   );
-   
-  return $form;
-  
+	
+	if ($term != "") {
+	$form["semanticweblog_form_association_admin_filter"]['reset'] = array(
+      '#type' => 'submit',
+      '#value' => t('Reset'),
+      '#submit' => array('semanticweblog_form_association_admin_filter_reset'),
+    );
+	}
+	return $form;
 }
 
-function semanticweblog_form_association_admin_filter_advanced_submit($form, &$form_state){
-    $tid1 = semanticweblog_term2tid($form_state["values"]["role1-filter"]);
+function semanticweblog_form_association_admin_filter_submit($form, &$form_state){
+	if ($form_state["values"]["term"] != "") {
+		$term = semanticweblog_term2tid($form_state["values"]["term"]);   
+    drupal_goto("admin/content/association/" . $term );
+    return;
+  }
+  if ($form_state["values"]["role1-filter"] != "" and $form_state["values"]["role1-filter"] != ""){
+  	$tid1 = semanticweblog_term2tid($form_state["values"]["role1-filter"]);
     $tid2 = semanticweblog_term2tid($form_state["values"]["role2-filter"]);
     $atid = $form_state["values"]["atid-filter"];
-    if($tid1==""){$tid1="any";}
-    if($tid2==""){$tid2="any";}
     drupal_goto("admin/content/association/" . $tid1 . "/" . $atid . "/" . $tid2);
+  }else{
+  	drupal_goto("admin/content/association/"); 
+  }
 }
 
+function semanticweblog_form_association_admin_filter_reset($form, &$form_state){
+	drupal_goto("admin/content/association/");
+}
+ 
 /**
  * Checks wether an Association already exists
  *
@@ -501,12 +497,12 @@ function semanticweblog_load_filtered_associations(){
     $first = false;
   }elseif($term1 !="" or $type !="" or $term2 !=""){
     $where = " WHERE ";
-    if($term1 !="any"){
+    if($term1 !=""){
       $where .= "member1tid = %d";
       $first = false;
       $args[] = $term1;
     }
-    if($type !="any"){
+    if($type !="0"){
        if (!$first){
          $where .= " AND ";     
        }
@@ -514,7 +510,7 @@ function semanticweblog_load_filtered_associations(){
       $first = false;
       $args[] = $type;
     }
-    if($term2 !="any"){
+    if($term2 !=""){
        if (!$first){
          $where .= " AND ";     
        }

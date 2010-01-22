@@ -195,8 +195,7 @@ function semanticweblog_administer_associations() {
   }else{
     $display = "all";
   }  
-  $output .= drupal_get_form("semanticweblog_form_association_admin_filter_basic");
-  $output .= drupal_get_form("semanticweblog_form_association_admin_filter_advanced");
+  $output .= drupal_get_form("semanticweblog_form_association_admin_filter");
   $assocs = semanaticweblog_get_associations($display);  
   foreach ($assocs as $assoc) {
     $rows[] = array(
