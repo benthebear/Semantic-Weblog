@@ -569,13 +569,13 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     	case "updown":
     		$associations_up = semanticweblog_api_term_get_own_associations($term->tid);
     		$associations_down = semanticweblog_api_term_get_foreign_associations($term->tid);
-    		$associations = array_merge($associations_down, $associations_up);
+    		$associations = array_merge($associations_up, $associations_down);
     		break;
     		
     	case "downup":
     		$associations_up = semanticweblog_api_term_get_own_associations($term->tid);
     		$associations_down = semanticweblog_api_term_get_foreign_associations($term->tid);
-    		$associations = array_merge($associations_up, $associations_down);
+    		$associations = array_merge($associations_down, $associations_up);
     		break;
     }
     
