@@ -42,6 +42,7 @@
 
 /**
 * History
+* 2010 01 27 [fym]: Added Option to group listed associations (up- and downwards) on Term Pages
 * 2010 01 22 [fym]: refactored filtering for the Association Admin Page.
 * 2010 01 21 [ben]: Added basic and advanced Filter for the Association Admin Page.
 * 2010 01 12 [fym]: added deletion of options on deinstallation
@@ -315,7 +316,6 @@ function semanticweblog_admin_settings() {
     '#description' => t('Position of Associations relative to listed nodes'),
     '#options' => $position_options,
   );
-  
   $display_options = array(
     'not' => 'No Associations at all',
     'plain' => 'A Plain List of all Associated Terms', 
@@ -329,6 +329,19 @@ function semanticweblog_admin_settings() {
     '#description' => t('Type of Display of the associations on the Term pages'),
     '#options' => $display_options,
   );
+  $grouping_options = array(
+    'none' => 'No particular order',
+    'updown' => 'Up- then downwards', 
+    'downup' => 'Down- then upwards',
+    );
+  $form['semanticweblog']['semanticweblog_admin_associations_grouping'] = array('#type' => 'select',
+    '#title' => t('Grouping order of associations'),
+    '#default_value' => variable_get('semanticweblog_admin_associations_grouping', "plain"),
+    '#size' => 1,
+    '#description' => t('The order in which associations are listed on term pages'),
+    '#options' => $grouping_options,
+  );
+  
   
   return system_settings_form($form);
 }
@@ -547,13 +560,32 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     $association_output .= filter_xss_admin($term->description);
     $association_output .= '</div>';
     
+    // determine in which way the associations are grouped
+    switch(variable_get('semanticweblog_admin_associations_grouping', "plain")){
+    	case "none":
+    		$associations = semanticweblog_api_term_get_all_associations($term->tid);
+    		break;
+    		
+    	case "updown":
+    		$associations_up = semanticweblog_api_term_get_own_associations($term->tid);
+    		$associations_down = semanticweblog_api_term_get_foreign_associations($term->tid);
+    		$associations = array_merge($associations_down, $associations_up);
+    		break;
+    		
+    	case "downup":
+    		$associations_up = semanticweblog_api_term_get_own_associations($term->tid);
+    		$associations_down = semanticweblog_api_term_get_foreign_associations($term->tid);
+    		$associations = array_merge($associations_up, $associations_down);
+    		break;
+    }
+    
     // Add Associations depending on the Settings.
     // To Add more options here, do this: 
     // 1. Add an Option in the semanticweblog_admin_settings() to the $display_options
     // 2. Add a funciton semanticweblog_theme_term_page_associations_yourdisplaytype($term)
     // 3. Add a case in this switch here.
-    $associations = semanticweblog_api_term_get_all_associations($term->tid);  
-    switch(variable_get('semanticweblog_admin_associations_display', "plain")){
+       
+   	switch(variable_get('semanticweblog_admin_associations_display', "plain")){
       case "plain":
         $association_output .= semanticweblog_theme_term_page_associations_plainlist($term, $associations);
         break;
