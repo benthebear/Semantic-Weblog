@@ -336,7 +336,7 @@ function semanticweblog_admin_settings() {
     );
   $form['semanticweblog']['semanticweblog_admin_associations_grouping'] = array('#type' => 'select',
     '#title' => t('Grouping order of associations'),
-    '#default_value' => variable_get('semanticweblog_admin_associations_grouping', "plain"),
+    '#default_value' => variable_get('semanticweblog_admin_associations_grouping', "none"),
     '#size' => 1,
     '#description' => t('The order in which associations are listed on term pages'),
     '#options' => $grouping_options,
@@ -561,7 +561,7 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     $association_output .= '</div>';
     
     // determine in which way the associations are grouped
-    switch(variable_get('semanticweblog_admin_associations_grouping', "plain")){
+    switch(variable_get('semanticweblog_admin_associations_grouping', "none")){
     	case "none":
     		$associations = semanticweblog_api_term_get_all_associations($term->tid);
     		break;
