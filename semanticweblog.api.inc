@@ -56,3 +56,17 @@ function semanticweblog_api_term_get_all_associations($termid){
   $raw_associations = semanticweblog_association_result2items($result);
   return semanticweblog_types_and_associations2array($raw_associations);
 }
+
+
+/**
+* This function simply checks if any associations exists for the given term
+*
+* @param termid integer The ID of the given Term
+* @return bool
+*/
+function semanticweblog_api_check_associations($termid){  
+  $result = db_query("SELECT aid FROM {semanticweblog_associations} WHERE member1tid = %d or member2tid = %d LIMIT 1", $termid, $termid);
+  $data = db_fetch_array($result);
+ 	if ($data) { return TRUE; }
+ 	else { return FALSE; }
+}

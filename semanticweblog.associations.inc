@@ -199,7 +199,7 @@ function semanticweblog_ajax_add_association() {
     //'#description' => t('Enter a name for the second Member of your Association'),
   );
   
-  $form["semanticweblog_ajax_add_association"]["role2-ajax"]["#suffix"] = "<div id='result'/><input type='button' onclick='semanticweblog_send_assoc(\"".$base_url."\");' value='Creat Assoc on the fly'>";
+  $form["semanticweblog_ajax_add_association"]["role2-ajax"]["#suffix"] = "<div id='result'/><input type='button' onclick='semanticweblog_send_assoc(\"".$base_url."\");' value='".t('Create Association on the fly')."' />";
   return $form;
 }
 
@@ -593,7 +593,6 @@ function semanticweblog_association_result2items($result){
  */
 function semanaticweblog_get_associations($display) {
  
-  
   // Get all oer some Associations
   $assocs = array();
   switch($display){
@@ -609,7 +608,6 @@ function semanaticweblog_get_associations($display) {
   }
   
   return semanticweblog_types_and_associations2array($raw_associations);
-  
 }
 
 
@@ -684,7 +682,28 @@ function semanticweblog_types_and_associations2array($raw_associations){
       $rich_associations[$myass["aid"]] = $myass;
     }
   }
-  return $rich_associations;
+  // sort the association array according to name of member1
+	$sort_assocs = variable_get('semanticweblog_admin_associations_sorting', "none");
+	if ($sort_assocs != "none") {
+		usort($rich_associations, "semanticweblog_sort_assocs");
+	}
+	return $rich_associations;
+}
+
+/**
+ * A helper function for sorting
+ */
+function semanticweblog_sort_assocs($a, $b) {
+	$sortorder = variable_get('semanticweblog_admin_associations_sorting', "none");
+	switch ($sortorder) {
+		case "alpha_asc":
+			return strcmp($a['member1']['name'], $b['member1']['name']);
+			break;
+		
+		case "alpha_desc":
+			return strcmp($b['member1']['name'], $a['member1']['name']);
+			break;
+	}
 }
 
 // Functions for delete an association
