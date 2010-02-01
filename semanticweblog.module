@@ -43,6 +43,10 @@
 
 /**
 * History
+* 2010 01 31 [fym]: fixed missing "/" and typo in semanticweblog_ajax_add_association()
+* 2010 01 31 [fym]: Added semanticweblog_api_check_associations() for use in template files
+* 2010 01 31 [fym]: Added association creation form on term pages with no listed associations
+* 2010 01 30 [fym]: Added Option to sort listed associations on Term Pages
 * 2010 01 27 [fym]: Added Option to group listed associations (up- and downwards) on Term Pages
 * 2010 01 22 [fym]: refactored filtering for the Association Admin Page.
 * 2010 01 21 [ben]: Added basic and advanced Filter for the Association Admin Page.
@@ -339,8 +343,20 @@ function semanticweblog_admin_settings() {
     '#title' => t('Grouping order of associations'),
     '#default_value' => variable_get('semanticweblog_admin_associations_grouping', "none"),
     '#size' => 1,
-    '#description' => t('The order in which associations are listed on term pages'),
+    '#description' => t('The order in which associations are grouped on term pages, e.g. upwards associations first then downwards associations'),
     '#options' => $grouping_options,
+  );
+  $sorting_options = array(
+    'none' => 'none',
+    'alpha_asc' => 'alphabetically, ascending', 
+    'alpha_desc' => 'alphabetically, descending',
+    );
+  $form['semanticweblog']['semanticweblog_admin_associations_sorting'] = array('#type' => 'select',
+    '#title' => t('Sort order of listed associations'),
+    '#default_value' => variable_get('semanticweblog_admin_associations_sorting', "none"),
+    '#size' => 1,
+    '#description' => t('The sort order in which associations are listed on term pages'),
+    '#options' => $sorting_options,
   );
   
   
@@ -605,6 +621,7 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
     $nodetitle = '<h2 class="taxonomy-term-content-title">' . t('Content on the Topic') . '</h2>';
   }
 
+	// should associations be listed before or after regular content
 	switch(variable_get('semanticweblog_admin_associations_position', "before")){
       case "before":
         $output = $association_output . $nodetitle . taxonomy_render_nodes($result);
@@ -617,18 +634,25 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
 }
 
 function semanticweblog_theme_term_page_associations_plainlist($term, $associations){
-  $output  = "<div id=\"term-page-associations\">\n";
-  $output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
-  $output .= '<div class="taxonomy-term-associations associations-plainlist">';      
+      
   if(count($associations)>0){
+  	$output  = "<div id=\"term-page-associations\">\n";
+ 	 	$output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
+  	$output .= '<div class="associations-plainlist">';  
   	foreach ($associations as $assoc) {
       $output .= "<p>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</p>\n";       
     }
+    $output .= "</div>\n";
+  	$output .= "</div>\n";
   }else{
-  	$output .= t('This Term has no Associations yet.');
+  	if (user_access('administer semanticweblog')) {
+  		$output .= "<div id=\"term-page-associations\" class=\"administer-semanticweblog add-association\">\n";
+  		//$output .= t('This Term has no Associations yet.');
+  		$output .= drupal_get_form("semanticweblog_ajax_add_association");
+  		$output .= "</div>\n";
+  	}
   }   
-  $output .= "</div>\n";
-  $output .= "</div>\n";
+  
   return $output;
 }
 
@@ -642,25 +666,28 @@ function semanticweblog_theme_term_page_associations_lists($term, $associations,
 		$listtype = "ol";
 			break; 
 	}
-  $output  = "<div id=\"term-page-associations\">\n";
-  $output .= "<h2 class=\"taxonomy-term-assciation-title\">" . t('Associations of this Term') . "</h2>\n";
-  $output .= "<div class=\"taxonomy-term-associations associations-".$mode."list\">\n";      
   if(count($associations)>0){
+  	$output  = "<div id=\"term-page-associations\">\n";
+  	$output .= "<h2 class=\"taxonomy-term-assciation-title\">" . t('Associations of this Term') . "</h2>\n";
+  	$output .= "<div class=\"associations-".$mode."list\">\n"; 
   	$output .= "<".$listtype.">\n";
   	foreach ($associations as $assoc) {
       $output .= "<li>". l($assoc["member1"]["name"], "taxonomy/term/" . $assoc["member1"]["tid"]) . ' ' .  $assoc["type"]["sentence"] . ' ' .  l($assoc["member2"]["name"], "taxonomy/term/" . $assoc["member2"]["tid"]). "</li>\n";       
     }
     $output .= "</".$listtype.">\n";
+    $output .= "</div>\n";
+  	$output .= "</div>\n";
   }else{
-  	$output .= t('This Term has no Associations yet.');
+  	if (user_access('administer semanticweblog')) {
+  		$output .= "<div id=\"term-page-associations\" class=\"administer-semanticweblog add-association\">\n";
+  		//$output .= t('This Term has no Associations yet.');
+  		$output .= drupal_get_form("semanticweblog_ajax_add_association");
+  		$output .= "</div>\n";
+  	}
   }   
-  $output .= "</div>\n";
-  $output .= "</div>\n";
+  
   return $output;
 }
-
-
-
 
 /**
 * This functions searches for Links between Nodes
@@ -668,9 +695,6 @@ function semanticweblog_theme_term_page_associations_lists($term, $associations,
 function semanticweblog_nodes_linking_to_me($node) {
 
 }
-
-
-
 
 /**
 * This function thmes a Block which contains all Terms of one Node

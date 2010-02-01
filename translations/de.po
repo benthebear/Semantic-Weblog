@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-01-27 11:27+0100\n"
-"PO-Revision-Date: 2010-01-27 11:27+0100\n"
+"POT-Creation-Date: 2010-01-31 22:57+0100\n"
+"PO-Revision-Date: 2010-01-31 22:57+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: semanticweblog.associations.inc:73;166;220 semanticweblog.module:259
+#: semanticweblog.associations.inc:73;166;220 semanticweblog.module:263
 msgid "Add an Association"
 msgstr ""
 
@@ -61,6 +61,10 @@ msgstr ""
 
 #: semanticweblog.associations.inc:146
 msgid "Your association has been saved."
+msgstr ""
+
+#: semanticweblog.associations.inc:202
+msgid "Create Association on the fly"
 msgstr ""
 
 #: semanticweblog.associations.inc:224
@@ -143,11 +147,11 @@ msgstr "Zurücksetzen"
 msgid "You have to set a vocabulary to be your lexicon first."
 msgstr ""
 
-#: semanticweblog.associations.inc:710
+#: semanticweblog.associations.inc:729
 msgid "Delete this Association"
 msgstr ""
 
-#: semanticweblog.associations.inc:721
+#: semanticweblog.associations.inc:740
 msgid "Your association has been deleted."
 msgstr ""
 
@@ -247,159 +251,163 @@ msgstr ""
 msgid "Your association type has been deleted."
 msgstr ""
 
-#: semanticweblog.module:282
+#: semanticweblog.module:286
 msgid "Lexicon Vocabulary"
 msgstr ""
 
-#: semanticweblog.module:285
+#: semanticweblog.module:289
 msgid "Which Vocabulary shall be your Lexicon?"
 msgstr ""
 
-#: semanticweblog.module:296
+#: semanticweblog.module:300
 msgid "No. of Assciations per Page"
 msgstr ""
 
-#: semanticweblog.module:299
+#: semanticweblog.module:303
 msgid "The Number of Associations per Page on the Association Admin Page"
 msgstr ""
 
-#: semanticweblog.module:303
+#: semanticweblog.module:307
 msgid "Separator for Bulk-Uploads"
 msgstr ""
 
-#: semanticweblog.module:306
+#: semanticweblog.module:310
 msgid "The Separator for you natural language bulk upload of Associations"
 msgstr ""
 
-#: semanticweblog.module:313
+#: semanticweblog.module:317
 msgid "Position of Associations"
 msgstr ""
 
-#: semanticweblog.module:316
+#: semanticweblog.module:320
 msgid "Position of Associations relative to listed nodes"
 msgstr ""
 
-#: semanticweblog.module:326
+#: semanticweblog.module:330
 msgid "Type of Display"
 msgstr ""
 
-#: semanticweblog.module:329
+#: semanticweblog.module:333
 msgid "Type of Display of the associations on the Term pages"
 msgstr ""
 
-#: semanticweblog.module:338
+#: semanticweblog.module:342
 msgid "Grouping order of associations"
 msgstr ""
 
-#: semanticweblog.module:341
-msgid "The order in which associations are listed on term pages"
+#: semanticweblog.module:345
+msgid "The order in which associations are grouped on term pages, e.g. upwards associations first then downwards associations"
 msgstr ""
 
-#: semanticweblog.module:358
+#: semanticweblog.module:354
+msgid "Sort order of listed associations"
+msgstr ""
+
+#: semanticweblog.module:357
+msgid "The sort order in which associations are listed on term pages"
+msgstr ""
+
+#: semanticweblog.module:374
 msgid "Semantic Weblog: Nodes Terms"
 msgstr ""
 
-#: semanticweblog.module:361
+#: semanticweblog.module:377
 msgid "Semantic Weblog: Create Association Ajax"
 msgstr ""
 
-#: semanticweblog.module:364
+#: semanticweblog.module:380
 msgid "Semantic Weblog: Create Association Bulk"
 msgstr ""
 
-#: semanticweblog.module:382
+#: semanticweblog.module:398
 msgid "Node Terms"
 msgstr ""
 
-#: semanticweblog.module:393
+#: semanticweblog.module:409
 msgid "Create an Association"
 msgstr ""
 
-#: semanticweblog.module:400
+#: semanticweblog.module:416
 msgid "Create multiple Associations"
 msgstr ""
 
-#: semanticweblog.module:503
+#: semanticweblog.module:519
 msgid "All Associations of the term have been deleted."
 msgstr ""
 
-#: semanticweblog.module:604
+#: semanticweblog.module:620
 msgid "Content on the Topic"
 msgstr "Inhalte dieses Topics"
 
-#: semanticweblog.module:620;645
+#: semanticweblog.module:639;670
 msgid "Associations of this Term"
 msgstr "Begriffsrelationen"
 
-#: semanticweblog.module:627;654
-msgid "This Term has no Associations yet."
-msgstr ""
-
-#: semanticweblog.module:144
+#: semanticweblog.module:148
 msgid "access semanticweblog"
 msgstr ""
 
-#: semanticweblog.module:144
+#: semanticweblog.module:148
 msgid "administer semanticweblog"
 msgstr ""
 
-#: semanticweblog.module:158 semanticweblog.info:0;0
+#: semanticweblog.module:162 semanticweblog.info:0;0
 msgid "Semantic Weblog"
 msgstr ""
 
-#: semanticweblog.module:159
+#: semanticweblog.module:163
 msgid "Several Settings for your Semantic Weblog"
 msgstr ""
 
-#: semanticweblog.module:168;177;186
+#: semanticweblog.module:172;181;190
 msgid "Register"
 msgstr ""
 
-#: semanticweblog.module:169;178;187
+#: semanticweblog.module:173;182;191
 msgid "The Register of a single Vocabulary"
 msgstr ""
 
-#: semanticweblog.module:195
+#: semanticweblog.module:199
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: semanticweblog.module:196
+#: semanticweblog.module:200
 msgid "Edit this Term"
 msgstr ""
 
-#: semanticweblog.module:203
+#: semanticweblog.module:207
 msgid "View"
 msgstr "Anzeigen"
 
-#: semanticweblog.module:204
+#: semanticweblog.module:208
 msgid "View this Term"
 msgstr ""
 
-#: semanticweblog.module:213;221;230
+#: semanticweblog.module:217;225;234
 msgid "Association Types"
 msgstr ""
 
-#: semanticweblog.module:214
+#: semanticweblog.module:218
 msgid "Add, edit and delete Association Types"
 msgstr ""
 
-#: semanticweblog.module:223
+#: semanticweblog.module:227
 msgid "Edit an Association Type"
 msgstr ""
 
-#: semanticweblog.module:232
+#: semanticweblog.module:236
 msgid "Delete an Association Type"
 msgstr ""
 
-#: semanticweblog.module:240;248;257
+#: semanticweblog.module:244;252;261
 msgid "Associations"
 msgstr ""
 
-#: semanticweblog.module:241
+#: semanticweblog.module:245
 msgid "Add, edit and delete Associations"
 msgstr ""
 
-#: semanticweblog.module:249
+#: semanticweblog.module:253
 msgid "Delete an Associations"
 msgstr ""
 
