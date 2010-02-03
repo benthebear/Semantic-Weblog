@@ -708,6 +708,11 @@ function semanticweblog_theme_term_page_associations_lists($term, $associations,
 			break; 
 	}
   if(count($associations)>0){
+  	if (user_access('administer semanticweblog')) {
+  		$output .= "<div class=\"admin-add-association\">\n";
+  		$output .= drupal_get_form("semanticweblog_ajax_add_association");
+  		$output .= "</div>\n";
+  	}
   	$output  = "<div id=\"term-page-associations\">\n";
   	$output .= "<h2 class=\"taxonomy-term-assciation-title\">" . t('Associations of this Term') . "</h2>\n";
   	$output .= "<div class=\"associations-".$mode."list\">\n"; 
@@ -721,7 +726,6 @@ function semanticweblog_theme_term_page_associations_lists($term, $associations,
   }else{
   	if (user_access('administer semanticweblog')) {
   		$output .= "<div id=\"term-page-associations\" class=\"administer-semanticweblog add-association\">\n";
-  		//$output .= t('This Term has no Associations yet.');
   		$output .= drupal_get_form("semanticweblog_ajax_add_association");
   		$output .= "</div>\n";
   	}
