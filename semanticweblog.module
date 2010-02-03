@@ -19,6 +19,7 @@
 *       See: http://konnexus.net/stories/artikellayout-mit-integrierten-topics
 * @todo [prio 1] Refactor recurrent Form-Fields for Terms and Associationtypes.
 *
+* @todo [prio 2] Further improve the semanticweblog_types_and_associations2array() to make ist sortable and groupable
 * @todo [prio 2] Add function semanticweblog_nodes_linking_to_me
 * @todo [prio 2] Enhance the Output on the taxonomy/term pages configurable via Admins settings.
 * @todo [prio 2] extend API functionality to request association information inside Themes and other Modules
