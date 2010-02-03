@@ -98,7 +98,7 @@ function semanticweblog_basic_add_association() {
 
   $form["semanticweblog_basic_add_association"]["role2-basic"] = array(
     '#type' => 'textfield',
-    '#title' => t('Second Memeber'),
+    '#title' => t('Second Member'),
     '#default_value' => '',
     '#size' => 30,
     '#maxlength' => 512,
@@ -158,11 +158,12 @@ function semanticweblog_basic_add_association_submit ($form, &$form_state) {
 function semanticweblog_ajax_add_association() {
   global $base_url;
   semanticweblog_vocab_is_set();
-  
+  $collapse_state = semanticweblog_api_check_associations(arg(2));
   $form = array();
   $form["semanticweblog_ajax_add_association"] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
+    '#collapsed' => $collapse_state,
     '#title' => t("Add an Association"),
     );
   $form["semanticweblog_ajax_add_association"]["role1-ajax"] = array(
@@ -191,7 +192,7 @@ function semanticweblog_ajax_add_association() {
 
   $form["semanticweblog_ajax_add_association"]["role2-ajax"] = array(
     '#type' => 'textfield',
-    '#title' => t('Second Memeber'),
+    '#title' => t('Second Member'),
     '#default_value' => '',
     '#size' => 30,
     '#maxlength' => 512,
@@ -636,7 +637,7 @@ function semanaticweblog_get_associations($display) {
 * $rich_associations[$aid]["member1"]["tid"] = ID of the first (downward) Term
 * $rich_associations[$aid]["member1"]["name"] = Name of the first (downward) Term
 * $rich_associations[$aid]["member1"]["role"] = Role of the first (downward) Term
-* // The second memeber of this Association
+* // The second member of this Association
 * $rich_associations[$aid]["member2"]["tid"] = ID of the second (upward) Term
 * $rich_associations[$aid]["member2"]["name"] = Name of the second (upward) Term
 * $rich_associations[$aid]["member2"]["role"] = Role of the second (upward) Term
@@ -674,7 +675,7 @@ function semanticweblog_types_and_associations2array($raw_associations){
       $myass["member1"]["tid"] = $myass["member1tid"];
       $myass["member1"]["name"] = $terms[$myass["member1tid"]];
       $myass["member1"]["role"] = $myass["type"]["role1"];
-      // Build the second memeber of this Association
+      // Build the second member of this Association
       $myass["member2"]["tid"] = $myass["member2tid"];
       $myass["member2"]["name"] = $terms[$myass["member2tid"]];
       $myass["member2"]["role"] = $myass["type"]["role2"];

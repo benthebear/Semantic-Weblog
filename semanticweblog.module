@@ -42,6 +42,8 @@
 
 /**
 * History
+* 2010 02 03 [fym]: Added local tasks on term pages (associate, add)
+* 2010 02 03 [fym]: Revised display of association creation form on term pages 
 * 2010 01 31 [fym]: fixed missing "/" and typo in semanticweblog_ajax_add_association()
 * 2010 01 31 [fym]: Added semanticweblog_api_check_associations() for use in template files
 * 2010 01 31 [fym]: Added association creation form on term pages with no listed associations
@@ -208,6 +210,21 @@ function semanticweblog_menu() {
     'description' => 'View this Term',
     'access arguments' => array('access taxonomy'),
     'page callback' => 'semanticweblog_term_view',
+    'type' => MENU_LOCAL_TASK,
+  );
+  
+  $items['taxonomy/term/%/associate'] = array(
+    'title' => 'Associate',
+    'description' => 'Edit Associations of this Term',
+    'access arguments' => array('access taxonomy'),
+    'page callback' => 'semanticweblog_term_associate',
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['taxonomy/term/%/addterm'] = array(
+    'title' => 'Add',
+    'description' => 'Add a new term',
+    'access arguments' => array('administer taxonomy'),
+    'page callback' => 'semanticweblog_term_add',
     'type' => MENU_LOCAL_TASK,
   );
 
@@ -460,6 +477,27 @@ function semanticweblog_term_edit() {
 }
 
 /**
+* Additional Local Task "Associate" for Terms
+*/
+
+function semanticweblog_term_associate() {
+	drupal_goto("admin/content/association/" . arg(2));
+}
+
+/**
+* Additional Local Task "add" for Terms - redirect to taxonomy
+*/
+
+function semanticweblog_term_add() {
+	$lexicon = variable_get('semanticweblog_lexicon', "");
+	if ($lexicon != "") {
+		drupal_goto("admin/content/taxonomy/" . $lexicon . "/add/term");
+	} else {
+		drupal_goto("admin/content/taxonomy/");
+	}
+}
+
+/**
 * Implementation of hook_form_alter
 *
 * To position the taxonomy
@@ -635,7 +673,12 @@ function semanticweblog_taxonomy_term_page($tids, $result) {
 function semanticweblog_theme_term_page_associations_plainlist($term, $associations){
       
   if(count($associations)>0){
-  	$output  = "<div id=\"term-page-associations\">\n";
+  	if (user_access('administer semanticweblog')) {
+  		$output .= "<div class=\"admin-add-association\">\n";
+  		$output .= drupal_get_form("semanticweblog_ajax_add_association");
+  		$output .= "</div>\n";
+  	}
+  	$output .= "<div id=\"term-page-associations\">\n";
  	 	$output .= '<h2 class="taxonomy-term-assciation-title">' . t('Associations of this Term') . '</h2>';
   	$output .= '<div class="associations-plainlist">';  
   	foreach ($associations as $assoc) {
@@ -646,7 +689,6 @@ function semanticweblog_theme_term_page_associations_plainlist($term, $associati
   }else{
   	if (user_access('administer semanticweblog')) {
   		$output .= "<div id=\"term-page-associations\" class=\"administer-semanticweblog add-association\">\n";
-  		//$output .= t('This Term has no Associations yet.');
   		$output .= drupal_get_form("semanticweblog_ajax_add_association");
   		$output .= "</div>\n";
   	}
