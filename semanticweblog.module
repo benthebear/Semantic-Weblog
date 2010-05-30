@@ -688,7 +688,7 @@ function semanticweblog_theme_term_page_associations_plainlist($term, $associati
     }
     $output .= "</div>\n";
   	$output .= "</div>\n";
-  }else{
+  }elseif($term->vid == variable_get('semanticweblog_lexicon', "")){
   	if (user_access('administer semanticweblog')) {
   		$output .= "<div id=\"term-page-associations\" class=\"administer-semanticweblog add-association\">\n";
   		$output .= drupal_get_form("semanticweblog_ajax_add_association");
@@ -725,7 +725,7 @@ function semanticweblog_theme_term_page_associations_lists($term, $associations,
     $output .= "</".$listtype.">\n";
     $output .= "</div>\n";
   	$output .= "</div>\n";
-  }else{
+  }elseif($term->vid == variable_get('semanticweblog_lexicon', "")){
   	if (user_access('administer semanticweblog')) {
   		$output .= "<div id=\"term-page-associations\" class=\"administer-semanticweblog add-association\">\n";
   		$output .= drupal_get_form("semanticweblog_ajax_add_association");
