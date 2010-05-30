@@ -517,7 +517,8 @@ function semanticweblog_form_alter(&$form, $form_state, $form_id) {
 *
 */
 function semanticweblog_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  if ($op=="view") {
+  if ($op=="view" and !$a3) {
+	  //dprint_r($a3);
     semanticweblog_extend_head();
   }
 }
